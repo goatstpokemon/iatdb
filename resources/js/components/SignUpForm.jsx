@@ -3,11 +3,39 @@ import { useState } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 export const SignUpForm = ({ className, ...props }) => {
     const [isLoading, setIsLoading] = useState(false);
-
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [passwordConfirmation, setPasswordConfirmation] = useState("");
+    const [type1, setType1] = useState("password");
+    const [icon1, setIcon1] = useState(
+        <EyeOff size={16} className="absolute mr-20" />
+    );
+    const [type2, setType2] = useState("password");
+    const [icon2, setIcon2] = useState(
+        <EyeOff size={16} className="absolute mr-20" />
+    );
+    const handleToggle1 = () => {
+        if (type1 === "password") {
+            setIcon1(<Eye size={16} className="absolute mr-20" />);
+            setType1("text");
+        } else {
+            setIcon1(<EyeOff size={16} className="absolute mr-20" />);
+            setType1("password");
+        }
+    };
+    const handleToggle2 = () => {
+        if (type2 === "password") {
+            setIcon2(<Eye size={16} className="absolute mr-20" />);
+            setType2("text");
+        } else {
+            setIcon2(<EyeOff size={16} className="absolute mr-20" />);
+            setType2("password");
+        }
+    };
     async function onSubmit(event) {
         event.preventDefault();
         setIsLoading(true);
@@ -19,7 +47,7 @@ export const SignUpForm = ({ className, ...props }) => {
 
     return (
         <div className={cn("grid gap-6", className)} {...props}>
-            <Form onSubmit={onSubmit}>
+            <form onSubmit={onSubmit}>
                 <div className="grid gap-2">
                     <div className="grid gap-1">
                         <Label className="font-bold" htmlFor="email">
@@ -30,25 +58,68 @@ export const SignUpForm = ({ className, ...props }) => {
                             placeholder="name@example.com"
                             type="email"
                             autoCapitalize="none"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             autoComplete="email"
                             autoCorrect="off"
                             disabled={isLoading}
                         />
                     </div>
-                    <div className="grid gap-1 py-4">
+                    <div className="grid gap-1 py-2">
                         <Label className="font-bold" htmlFor="wachtwoord">
                             Wachtwoord
                         </Label>
-                        <Input
-                            id="wachtwoord"
-                            placeholder="iets super velig!"
-                            type="password"
-                            autoCapitalize="none"
-                            autoComplete="email"
-                            autoCorrect="off"
-                            disabled={isLoading}
-                        />
+
+                        <div className="flex ">
+                            <Input
+                                id="wachtwoord"
+                                placeholder="iets super velig!"
+                                type={type1}
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                autoCapitalize="none"
+                                autoComplete="email"
+                                autoCorrect="off"
+                                disabled={isLoading}
+                            />
+                            <span
+                                class="flex justify-around items-center"
+                                onClick={handleToggle1}
+                            >
+                                {icon1}
+                            </span>
+                        </div>
                     </div>
+                    {password.length > 5 ? (
+                        <div className="grid gap-1 py-2 animate-fade">
+                            <Label
+                                className="font-bold flex"
+                                htmlFor="confirmpassword"
+                            >
+                                Bevestig Wachtwoord
+                            </Label>
+                            <div className="flex ">
+                                <Input
+                                    id="confirmpassword"
+                                    placeholder="Om het zeker te weten!"
+                                    type={type2}
+                                    value={passwordConfirmation}
+                                    onChange={(e) =>
+                                        setPasswordConfirmation(e.target.value)
+                                    }
+                                    autoCapitalize="none"
+                                    autoCorrect="off"
+                                    disabled={isLoading}
+                                />
+                                <span
+                                    class="flex justify-around items-center"
+                                    onClick={handleToggle2}
+                                >
+                                    {icon2}
+                                </span>
+                            </div>
+                        </div>
+                    ) : null}
                     <Button disabled={isLoading}>
                         Inloggen
                         {isLoading && (
@@ -56,7 +127,7 @@ export const SignUpForm = ({ className, ...props }) => {
                         )}
                     </Button>
                 </div>
-            </Form>
+            </form>
         </div>
     );
 };
