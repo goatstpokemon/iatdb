@@ -2,11 +2,43 @@ import { SignUpForm } from "@/components/SignUpForm";
 import { buttonVariants } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 import { Clock } from "lucide-react";
-import React from "react";
+import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 
 export const SignUp = () => {
+    const imageRef = useRef();
+    const tl = gsap.timeline();
+    useGSAP(() => {
+        tl.fromTo(
+            ".topDown",
+            {
+                height: 0,
+                opacity: 0,
+            },
+            {
+                duration: 2,
+                height: "auto",
+                opacity: 1,
+                ease: "power3.inOut",
+            },
+            "+=1"
+        );
+
+        tl.to(
+            ".slideOut",
+            {
+                duration: 2,
+                width: "40vw",
+                opacity: 1,
+                ease: "power3.inOut",
+            },
+            0
+        );
+    });
+
     return (
         <>
             <Toaster />
@@ -26,25 +58,26 @@ export const SignUp = () => {
                     </div>
                 </div>
                 <Link
-                    to="/aanmelden"
+                    to="/login"
                     className={cn(
                         buttonVariants({ variant: "cool" }),
-                        "absolute right-4 top-4 md:right-8 md:top-8  "
+                        "absolute right-4 top-4 md:right-8 md:top-8 font-semibold "
                     )}
                 >
-                    Account aanmaken
+                    Ik heb al een account
                 </Link>
-                <div className="relative hidden  xl:max-w-[20vw] md:flex md:flex-col md:justify-center">
-                    <div className="h-fit relative mb-10">
+                <div className="relative hidden  md:flex md:flex-col md:justify-center ">
+                    <div className="h-fit relative mb-10 topDown">
                         <img
-                            src="storage/peson.jpg"
-                            className="rounded-2xl xl:max-w-[20vw] "
+                            ref={imageRef}
+                            src="storage/person.jpg"
+                            className="rounded-2xl w-[40vw]" // Update CSS properties
                             alt=""
                         />
                     </div>
-                    <div className=" h-1/2 xl:max-w-[25vw] flex-col bg-muted p-10 text-white lg:flex dark:border-r justify-end xl:max-h-[15vh] bg-zinc-900 rounded-2xl">
+                    <div className=" w-0 opacity-0 h-auto  flex-col bg-muted p-10 text-white lg:flex dark:border-r justify-end xl:max-h-[15vh] bg-zinc-900 rounded-2xl slideOut">
                         <div className="relative  z-20 flex flex-col  align-bottom text-xl font-medium">
-                            <div className="flex items-center mb-4 ">
+                            <div className="flex items-center mb-4  ">
                                 <Clock size={24} />
                                 <h1 className="ml-2">Time2Share</h1>
                             </div>

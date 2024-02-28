@@ -83,7 +83,7 @@ export const SignUpForm = ({ className, ...props }) => {
                                 disabled={isLoading}
                             />
                             <span
-                                class="flex justify-around items-center"
+                                className="flex justify-around items-center"
                                 onClick={handleToggle1}
                             >
                                 {icon1}

@@ -4,8 +4,41 @@ import { Link } from "react-router-dom";
 import { buttonVariants } from "@/components/ui/button";
 import { Clock } from "lucide-react";
 import { Toaster } from "../js/components/ui/sonner";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import React, { useRef } from "react";
 
 export const Login = () => {
+    const imageRef = useRef();
+    const tl = gsap.timeline();
+    useGSAP(() => {
+        tl.fromTo(
+            ".topDown",
+            {
+                height: 0,
+                opacity: 0,
+            },
+            {
+                duration: 2,
+                height: "auto",
+                opacity: 1,
+                ease: "power3.inOut",
+            },
+            "+=1"
+        );
+
+        tl.to(
+            ".slideOut",
+            {
+                duration: 2,
+                width: "40vw",
+                opacity: 1,
+                ease: "power3.inOut",
+            },
+            0
+        );
+    });
+
     return (
         <>
             <Toaster />
@@ -32,24 +65,28 @@ export const Login = () => {
                 >
                     Account aanmaken
                 </Link>
-                <div className="relative hidden  xl:max-w-[20vw] md:flex md:flex-col md:justify-center">
-                    <div className="h-fit relative mb-10">
+                <div
+                    className="relative hidden md:flex md:flex-col
+                md:justify-center "
+                >
+                    <div className="h-fit relative mb-10 topDown">
                         <img
-                            src="storage/peson.jpg"
-                            className="rounded-2xl xl:max-w-[20vw] "
+                            ref={imageRef}
+                            src="storage/person.jpg"
+                            className="rounded-2xl w-[40vw]" // Update CSS properties
                             alt=""
                         />
                     </div>
-                    <div className=" h-1/2 xl:max-w-[25vw] flex-col bg-muted p-10 text-white lg:flex dark:border-r justify-end xl:max-h-[15vh] bg-zinc-900 rounded-2xl">
+                    <div className=" w-0 opacity-0 h-auto  flex-col bg-muted p-10 text-white lg:flex dark:border-r justify-end xl:max-h-[15vh] bg-zinc-900 rounded-2xl slideOut">
                         <div className="relative  z-20 flex flex-col  align-bottom text-xl font-medium">
-                            <div className="flex items-center mb-4 ">
+                            <div className="flex items-center mb-4  ">
                                 <Clock size={24} />
                                 <h1 className="ml-2">Time2Share</h1>
                             </div>
                             <br />
                             Delen van producten verlaagt de impact op het
                             milieu. <br />
-                            Begin daarom vnadaag nog met Time2Share!
+                            Begin daarom vandaag nog met Time2Share!
                         </div>
                     </div>
                 </div>

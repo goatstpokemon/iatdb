@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
     darkMode: ["class"],
     content: [
         "./resources/js/**/*.{js,jsx}",
@@ -64,16 +64,25 @@ module.exports = {
                     from: { height: "var(--radix-accordion-content-height)" },
                     to: { height: "0" },
                 },
+                "top-down": {
+                    from: { height: "0" },
+                    to: { height: "100%" },
+                },
                 fadeIn: {
                     from: { opacity: 0 },
                     to: { opacity: 1 },
                 },
+                pulse: {
+                    "0%, 100%": { opacity: 1 },
+                    "50%": { opacity: 0.5 },
+                },
             },
-            animation: {
-                "accordion-down": "accordion-down 0.2s ease-out",
-                "accordion-up": "accordion-up 0.2s ease-out",
-                fade: "fadeIn .5s ease-in-out",
-            },
+        },
+        animation: {
+            "accordion-down": "accordion-down 0.2s ease-out",
+            "accordion-up": "accordion-up 0.2s ease-out",
+            fade: "fadeIn .5s ease-in-out",
+            pulse: "pulse 5s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         },
     },
     plugins: [require("tailwindcss-animate")],
