@@ -31,8 +31,8 @@ export const Login = () => {
             ".slideOut",
             {
                 duration: 2,
-                width: "40vw",
                 opacity: 1,
+                width: "w-full",
                 ease: "power3.inOut",
             },
             0
@@ -42,7 +42,7 @@ export const Login = () => {
     return (
         <>
             <Toaster />
-            <div className="container relative hidden h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+            <div className="container relative h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
                 <div className="lg:p-8 lg:w-[30vw] lg:mx-auto">
                     <div className="mx-auto flex w-full flex-col justify-center space-y-4 sm:w-[350px]">
                         <div className="flex flex-col space-y-2 text-center">
@@ -66,19 +66,19 @@ export const Login = () => {
                     Account aanmaken
                 </Link>
                 <div
-                    className="relative hidden md:flex md:flex-col
-                md:justify-center "
+                    className="relative hidden lg:flex lg:flex-col
+                lg:justify-center "
                 >
                     <div className="h-fit relative mb-10 topDown">
                         <img
                             ref={imageRef}
                             src="storage/person.jpg"
-                            className="rounded-2xl w-[40vw]" // Update CSS properties
+                            className="rounded-2xl xl:w-[25vw] md:w-[40vw]" // Update CSS properties
                             alt=""
                         />
                     </div>
-                    <div className=" w-0 opacity-0 h-auto  flex-col bg-muted p-10 text-white lg:flex dark:border-r justify-end xl:max-h-[15vh] bg-zinc-900 rounded-2xl slideOut">
-                        <div className="relative  z-20 flex flex-col  align-bottom text-xl font-medium">
+                    <div className=" w-0 opacity-0 h-auto  flex-col bg-muted p-10 text-white lg:flex dark:border-r justify-end xl:w-[25vw] md:w-[40vw]  bg-zinc-900 rounded-2xl slideOut">
+                        <div className="relative  z-20 flex flex-col  align-bottom sm:text-md xl:text-lg font-medium xl:w-[25vw] md:w-[40vw]">
                             <div className="flex items-center mb-4  ">
                                 <Clock size={24} />
                                 <h1 className="ml-2">Time2Share</h1>
