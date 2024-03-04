@@ -73,20 +73,21 @@ export const Login = () => {
                         <img
                             ref={imageRef}
                             src="storage/person.jpg"
-                            className="rounded-2xl xl:w-[25vw] md:w-[40vw]" // Update CSS properties
+                            className="rounded-2xl xl:w-[25vw] md:w-[40vw] -z-10" // Update CSS properties
                             alt=""
                         />
-                    </div>
-                    <div className=" w-0 opacity-0 h-auto  flex-col bg-muted p-10 text-white lg:flex dark:border-r justify-end xl:w-[25vw] md:w-[40vw]  bg-zinc-900 rounded-2xl slideOut">
-                        <div className="relative  z-20 flex flex-col  align-bottom sm:text-md xl:text-lg font-medium xl:w-[25vw] md:w-[40vw]">
-                            <div className="flex items-center mb-4  ">
-                                <Clock size={24} />
-                                <h1 className="ml-2">Time2Share</h1>
+
+                        <div className=" z-20 w-0 opacity-0 h-auto  flex-col bg-muted p-10 text-white lg:flex dark:border-r justify-end xl:w-[25vw] md:w-[40vw]  bg-zinc-900 rounded-2xl slideOut">
+                            <div className="relative  flex flex-col  align-bottom sm:text-md xl:text-lg font-medium xl:w-[25vw] md:w-[40vw]">
+                                <div className="flex items-center mb-4  ">
+                                    <Clock size={24} />
+                                    <h1 className="ml-2">Time2Share</h1>
+                                </div>
+                                <br />
+                                Delen van producten verlaagt de impact op het
+                                milieu. <br />
+                                Begin daarom vandaag nog met Time2Share!
                             </div>
-                            <br />
-                            Delen van producten verlaagt de impact op het
-                            milieu. <br />
-                            Begin daarom vandaag nog met Time2Share!
                         </div>
                     </div>
                 </div>

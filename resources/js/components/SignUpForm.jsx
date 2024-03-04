@@ -4,10 +4,13 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
+import apiClient from "@/api";
+import { toast } from "sonner";
 
 export const SignUpForm = ({ className, ...props }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [email, setEmail] = useState("");
+    const [name, setName] = useState("");
     const [password, setPassword] = useState("");
     const [passwordConfirmation, setPasswordConfirmation] = useState("");
     const [type1, setType1] = useState("password");
@@ -36,19 +39,66 @@ export const SignUpForm = ({ className, ...props }) => {
             setType2("password");
         }
     };
+
     async function onSubmit(event) {
         event.preventDefault();
         setIsLoading(true);
 
-        setTimeout(() => {
+        if (password === passwordConfirmation) {
+            apiClient
+                .get("http://localhost:8000/sanctum/csrf-cookie")
+                .then((response) => {
+                    apiClient
+                        .post("http://localhost:8000/api/signup", {
+                            email,
+                            password,
+                            name,
+                        })
+                        .then((response) => {
+                            console.log(response);
+                            setIsLoading(false);
+                            if (response.status === 201) {
+                                console.log("success");
+                                toast("Je bent geregistreerd!");
+                            } else {
+                                toast(
+                                    "Er is iets fout gegaan, probeer het opnieuw"
+                                );
+                            }
+                        })
+                        .catch((error) => {
+                            setIsLoading(false);
+                            toast(
+                                error.response.data.message ||
+                                    "Er is iets fout gegaan, probeer het opnieuw"
+                            );
+                        });
+                });
+        } else {
             setIsLoading(false);
-        }, 3000);
+            toast("Wachtwoorden komen niet overeen");
+        }
     }
 
     return (
         <div className={cn("grid gap-6", className)} {...props}>
             <form onSubmit={onSubmit}>
                 <div className="grid gap-2">
+                    <div className="grid gap-1">
+                        <Label className="font-bold" htmlFor="email">
+                            Naam
+                        </Label>
+                        <Input
+                            id="name"
+                            placeholder="Jouw naam"
+                            type="text"
+                            autoCapitalize="none"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            autoCorrect="off"
+                            disabled={isLoading}
+                        />
+                    </div>
                     <div className="grid gap-1">
                         <Label className="font-bold" htmlFor="email">
                             Email
@@ -112,7 +162,7 @@ export const SignUpForm = ({ className, ...props }) => {
                                     disabled={isLoading}
                                 />
                                 <span
-                                    class="flex justify-around items-center"
+                                    className="flex justify-around items-center"
                                     onClick={handleToggle2}
                                 >
                                     {icon2}

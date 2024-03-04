@@ -1,39 +1,64 @@
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Loader2 } from "lucide-react";
-import axios from "axios";
 import { toast } from "sonner";
+import apiClient from "@/api";
+import { AuthContext } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export const LoginForm = ({ className, ...props }) => {
+    const history = useNavigate();
+
     const [isLoading, setIsLoading] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const { SetAuth, isLoggedIn } = useContext(AuthContext);
+    useEffect(() => {
+        if (isLoggedIn === true) {
+            history("/");
+        }
+    }, [isLoggedIn]);
     async function onSubmit(event) {
         event.preventDefault();
         setIsLoading(true);
-        axios
-            .post("http://localhost:8000/api/login", {
-                email,
-                password,
-            })
+        apiClient
+            .get("http://localhost:8000/sanctum/csrf-cookie")
             .then((response) => {
-                console.log(response);
-                setIsLoading(false);
-                if (response.status === 200) {
-                    toast("Je bent ingelogd!");
-                } else {
-                    toast("Er is iets fout gegaan, probeer het opnieuw");
-                }
-            })
-            .catch((error) => {
-                setIsLoading(false);
-                toast(
-                    error.response.data.message ||
-                        "Er is iets fout gegaan, probeer het opnieuw"
-                );
+                apiClient
+                    .post("http://localhost:8000/api/login", {
+                        email,
+                        password,
+                    })
+                    .then((response) => {
+                        console.log(response);
+                        setIsLoading(false);
+                        if (response.status === 200) {
+                            SetAuth(response.data);
+                            toast("Je bent ingelogd!");
+                            history("/");
+                        } else {
+                            toast(
+                                "Er is iets fout gegaan, probeer het opnieuw"
+                            );
+                        }
+                    })
+                    .catch((error) => {
+                        setIsLoading(false);
+                        toast(
+                            error.response.data.message ||
+                                "Er is iets fout gegaan, probeer het opnieuw"
+                        );
+                    })
+                    .catch((error) => {
+                        setIsLoading(false);
+                        toast(
+                            error.response.data.message ||
+                                "Er is iets fout gegaan, probeer het opnieuw"
+                        );
+                    });
             });
     }
 
