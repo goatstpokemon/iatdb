@@ -11,6 +11,7 @@ import Borrow from "../views/Borrow";
 import Lend from "../views/Lend";
 import Home from "../views/Home";
 import Logout from "../views/Logout";
+import Profile from "../views/cms/user/Profile";
 
 ReactDOM.createRoot(document.getElementById("app")).render(
     <AuthContextProvider>
@@ -21,6 +22,7 @@ ReactDOM.createRoot(document.getElementById("app")).render(
                         <Route path="" element={<Home />} />
                         <Route path="lenen" element={<Borrow />} />
                         <Route path="verhuren" element={<Lend />} />
+                        <Route path="profile" element={<Profile />} />
                     </Route>
                     <Route path="/login" element={<Login />} />
                     <Route path="/logout" element={<Logout />} />
