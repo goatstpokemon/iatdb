@@ -11,7 +11,8 @@ import Borrow from "../views/Borrow";
 import Lend from "../views/Lend";
 import Home from "../views/Home";
 import Logout from "../views/Logout";
-import Profile from "../views/cms/user/Profile";
+import SettingsLayout from "../views/cms/settings/SettingsLayout";
+import ProfileWrapper from "../views/cms/settings/profile/ProfileWrapper";
 
 ReactDOM.createRoot(document.getElementById("app")).render(
     <AuthContextProvider>
@@ -19,10 +20,12 @@ ReactDOM.createRoot(document.getElementById("app")).render(
             <BrowserRouter>
                 <Routes>
                     <Route exact path="/" element={<AppWrapper />}>
-                        <Route path="" element={<Home />} />
+                        <Route index path="" element={<Home />} />
                         <Route path="lenen" element={<Borrow />} />
                         <Route path="verhuren" element={<Lend />} />
-                        <Route path="profile" element={<Profile />} />
+                    </Route>
+                    <Route path="profile" element={<SettingsLayout />}>
+                        <Route index path="" element={<ProfileWrapper />} />
                     </Route>
                     <Route path="/login" element={<Login />} />
                     <Route path="/logout" element={<Logout />} />
