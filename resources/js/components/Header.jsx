@@ -27,7 +27,7 @@ const Header = () => {
         { title: "Verhuren", path: "/verhuren" },
     ];
     useEffect(() => {
-        if (localStorage.getItem("loggedIn") === false) {
+        if (localStorage.getItem("loggedIn") === false && !user.name) {
             location("/login");
         }
     }, [user]);
@@ -135,6 +135,7 @@ const Header = () => {
                 </nav>
             </header>
         );
+    } else {
     }
 };
 export default Header;

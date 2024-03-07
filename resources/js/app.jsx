@@ -13,6 +13,8 @@ import Home from "../views/Home";
 import Logout from "../views/Logout";
 import SettingsLayout from "../views/cms/settings/SettingsLayout";
 import ProfileWrapper from "../views/cms/settings/profile/ProfileWrapper";
+import { AccountPage } from "../views/cms/settings/account/AccountPage";
+import NotFound from "../views/404";
 
 ReactDOM.createRoot(document.getElementById("app")).render(
     <AuthContextProvider>
@@ -26,11 +28,12 @@ ReactDOM.createRoot(document.getElementById("app")).render(
                     </Route>
                     <Route path="profile" element={<SettingsLayout />}>
                         <Route index path="" element={<ProfileWrapper />} />
+                        <Route path="account" element={<AccountPage />} />
                     </Route>
                     <Route path="/login" element={<Login />} />
                     <Route path="/logout" element={<Logout />} />
                     <Route path="/aanmelden" element={<SignUp />} />
-                    <Route path="*" element={<h1>404</h1>} />
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
             </BrowserRouter>
         </NavbarContextProvider>

@@ -13,13 +13,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
@@ -83,9 +76,8 @@ const Profile = () => {
                                 <Input placeholder="shadcn" {...field} />
                             </FormControl>
                             <FormDescription>
-                                This is your public display name. It can be your
-                                real name or a pseudonym. You can only change
-                                this once every 30 days.
+                                Dit is je publiekelijke gebruikersnaam dus let
+                                op wat je hier invult
                             </FormDescription>
                             <FormMessage />
                         </FormItem>
@@ -97,28 +89,14 @@ const Profile = () => {
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Email</FormLabel>
-                            <Select onValueChange={field.onChange}>
-                                <FormControl>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select a verified email to display" />
-                                    </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                    <SelectItem value="m@example.com">
-                                        m@example.com
-                                    </SelectItem>
-                                    <SelectItem value="m@google.com">
-                                        m@google.com
-                                    </SelectItem>
-                                    <SelectItem value="m@support.com">
-                                        m@support.com
-                                    </SelectItem>
-                                </SelectContent>
-                            </Select>
+                            <FormControl>
+                                <Input
+                                    placeholder="voorbeeld@example.com"
+                                    {...field}
+                                />
+                            </FormControl>
                             <FormDescription>
-                                You can manage verified email addresses in your{" "}
-                                <Link to="/examples/forms">email settings</Link>
-                                .
+                                Pas hier je email aan
                             </FormDescription>
                             <FormMessage />
                         </FormItem>
@@ -132,14 +110,13 @@ const Profile = () => {
                             <FormLabel>Bio</FormLabel>
                             <FormControl>
                                 <Textarea
-                                    placeholder="Tell us a little bit about yourself"
+                                    placeholder="Een beetje over jezelf"
                                     className="resize-none"
                                     {...field}
                                 />
                             </FormControl>
                             <FormDescription>
-                                You can <span>@mention</span> other users and
-                                organizations to link to them.
+                                Vertel eens wat over jezelf
                             </FormDescription>
                             <FormMessage />
                         </FormItem>

@@ -1,8 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import SidebarNav from "./SidebarNav";
 import { Outlet, useLocation } from "react-router-dom";
-import Header from "@/components/Header";
-import Profile from "./profile/Profile";
+import Header from "../../../js/components/Header";
 
 const SettingsLayout = () => {
     const location = useLocation();
@@ -38,16 +37,12 @@ const SettingsLayout = () => {
                 <div className="space-y-0.5">
                     <h2 className="text-2xl font-bold tracking-tight">
                         {sidebarNavItems.map((item) =>
-                            item.title.toLowerCase() === pathname.substring(1)
-                                ? item.title
-                                : null
+                            item.href === pathname ? item.title : null
                         )}
                     </h2>
                     <p className="text-muted-foreground">
                         {sidebarNavItems.map((item) =>
-                            item.title.toLowerCase() === pathname.substring(1)
-                                ? item.subtitle
-                                : null
+                            item.href === pathname ? item.subtitle : null
                         )}
                     </p>
                 </div>
