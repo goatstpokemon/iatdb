@@ -7,14 +7,20 @@ const AuthContextProvider = (props) => {
 
     const SetAuth = (user) => {
         localStorage.setItem("loggedIn", true);
+        localStorage.setItem("user", JSON.stringify(user));
         setUser(user);
     };
     const Logout = () => {
         setUser({});
-
+        localStorage.setItem("user", "");
         localStorage.setItem("loggedIn", false);
     };
-
+    useEffect(() => {
+        const user = localStorage.getItem("user");
+        if (user) {
+            setUser(JSON.parse(user));
+        }
+    }, []);
     return (
         <AuthContext.Provider value={{ user, SetAuth, Logout }}>
             {props.children}

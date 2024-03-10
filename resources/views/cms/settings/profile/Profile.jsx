@@ -16,28 +16,28 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+const ACCEPTED_IMAGE_TYPES = [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/webp",
+];
 const profileFormSchema = z.object({
     username: z
         .string()
         .min(2, {
-            message: "Username must be at least 2 characters.",
+            message: "2 karakters is wel heel kort, probeer het nog eens.",
         })
         .max(30, {
-            message: "Username must not be longer than 30 characters.",
+            message: "Het moet korter zijn dan 30 karakters.",
         }),
-    email: z
-        .string({
-            required_error: "Please select an email to display.",
-        })
-        .email(),
+    profilePhoto: z
+        .any()
+        .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files[0].type), {
+            message: "Dit is geen geldig bestandstype.",
+        }),
+
     bio: z.string().max(160).min(4),
-    urls: z
-        .array(
-            z.object({
-                value: z.string().url({ message: "Please enter a valid URL." }),
-            })
-        )
-        .optional(),
 });
 const Profile = () => {
     const form = useForm({
@@ -45,12 +45,7 @@ const Profile = () => {
         mode: "onChange",
     });
 
-    const { fields, append } = useFieldArray({
-        name: "urls",
-        control: form.control,
-    });
-
-    function onSubmit(data) {
+    const onSubmit = (data) => {
         toast({
             title: "You submitted the following values:",
             description: (
@@ -61,7 +56,7 @@ const Profile = () => {
                 </pre>
             ),
         });
-    }
+    };
 
     return (
         <Form {...form}>
@@ -71,7 +66,7 @@ const Profile = () => {
                     name="username"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Username</FormLabel>
+                            <FormLabel>Gebruikersnaam</FormLabel>
                             <FormControl>
                                 <Input placeholder="shadcn" {...field} />
                             </FormControl>
@@ -85,18 +80,18 @@ const Profile = () => {
                 />
                 <FormField
                     control={form.control}
-                    name="email"
+                    name="profilePicture"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Email</FormLabel>
+                            <FormLabel>Profiel Foto</FormLabel>
                             <FormControl>
                                 <Input
-                                    placeholder="voorbeeld@example.com"
+                                    placeholder="upload een foto"
                                     {...field}
                                 />
                             </FormControl>
                             <FormDescription>
-                                Pas hier je email aan
+                                Upload hier een profielfoto
                             </FormDescription>
                             <FormMessage />
                         </FormItem>
@@ -122,44 +117,7 @@ const Profile = () => {
                         </FormItem>
                     )}
                 />
-                <div>
-                    {fields.map((field, index) => (
-                        <FormField
-                            control={form.control}
-                            key={field.id}
-                            name={`urls.${index}.value`}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel
-                                        className={cn(index !== 0 && "sr-only")}
-                                    >
-                                        URLs
-                                    </FormLabel>
-                                    <FormDescription
-                                        className={cn(index !== 0 && "sr-only")}
-                                    >
-                                        Add links to your website, blog, or
-                                        social media profiles.
-                                    </FormDescription>
-                                    <FormControl>
-                                        <Input {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    ))}
-                    <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        className="mt-2"
-                        onClick={() => append({ value: "" })}
-                    >
-                        Add URL
-                    </Button>
-                </div>
-                <Button type="submit">Update profile</Button>
+                <Button type="submit">Update profiel</Button>
             </form>
         </Form>
     );

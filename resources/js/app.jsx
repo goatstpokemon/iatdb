@@ -15,6 +15,8 @@ import SettingsLayout from "../views/cms/settings/SettingsLayout";
 import ProfileWrapper from "../views/cms/settings/profile/ProfileWrapper";
 import { AccountPage } from "../views/cms/settings/account/AccountPage";
 import NotFound from "../views/404";
+import Product from "../views/Product";
+import LendingPage from "../views/cms/settings/lending/LendingPage";
 
 ReactDOM.createRoot(document.getElementById("app")).render(
     <AuthContextProvider>
@@ -25,10 +27,12 @@ ReactDOM.createRoot(document.getElementById("app")).render(
                         <Route index path="" element={<Home />} />
                         <Route path="lenen" element={<Borrow />} />
                         <Route path="verhuren" element={<Lend />} />
+                        <Route path="/product" element={<Product />} />
                     </Route>
                     <Route path="profile" element={<SettingsLayout />}>
                         <Route index path="" element={<ProfileWrapper />} />
                         <Route path="account" element={<AccountPage />} />
+                        <Route path="lending" element={<LendingPage />} />
                     </Route>
                     <Route path="/login" element={<Login />} />
                     <Route path="/logout" element={<Logout />} />

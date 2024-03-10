@@ -26,17 +26,24 @@ const accountFormSchema = z.object({
     name: z
         .string()
         .min(2, {
-            message: "Name must be at least 2 characters.",
+            message: "Je naam moet minstens 2 karakters lang zijn.",
         })
         .max(30, {
-            message: "Name must not be longer than 30 characters.",
+            message: "Maar niet langer dan 30 karakters.",
         }),
+    email: z.string().email(),
     dob: z.date({
-        required_error: "A date of birth is required.",
+        required_error: "Je moet een geboortedatum invullen.",
     }),
-    language: z.string({
-        required_error: "Please select a language.",
+    oldPassword: z.string({ message: "Je oude wachtwoord is verplicht." }),
+    newPassword: z.string().min(8, {
+        message: "Je wachtwoord moet minstens 8 karakters lang zijn.",
     }),
+    confirmPassword: z
+        .string()
+        .refine((value, data) => value === data.newPassword, {
+            message: "Je wachtwoorden komen niet overeen.",
+        }),
 });
 
 export const AccountPage = () => {
@@ -46,7 +53,7 @@ export const AccountPage = () => {
 
     const onSubmit = (data) => {
         toast({
-            title: "You submitted the following values:",
+            title: "Je hebt het volgende ingevuld:",
             description: (
                 <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
                     <code className="text-white">
@@ -60,18 +67,34 @@ export const AccountPage = () => {
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                <h1 className="font-bold text-4xl">Persoonlijke gegevens</h1>
                 <FormField
                     control={form.control}
                     name="name"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Name</FormLabel>
+                            <FormLabel>Naam</FormLabel>
                             <FormControl>
-                                <Input placeholder="Your name" {...field} />
+                                <Input placeholder="Jouw naam" {...field} />
                             </FormControl>
                             <FormDescription>
-                                This is the name that will be displayed on your
-                                profile and in emails.
+                                Dit is je naam, ook andere zien dit
+                            </FormDescription>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Email</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Jouw email" {...field} />
+                            </FormControl>
+                            <FormDescription>
+                                Je email dat je gebruikt voor inloggen
                             </FormDescription>
                             <FormMessage />
                         </FormItem>
@@ -82,7 +105,7 @@ export const AccountPage = () => {
                     name="dob"
                     render={({ field }) => (
                         <FormItem className="flex flex-col">
-                            <FormLabel>Date of birth</FormLabel>
+                            <FormLabel>Geboorte datum</FormLabel>
                             <Popover>
                                 <PopoverTrigger asChild>
                                     <FormControl>
@@ -97,7 +120,7 @@ export const AccountPage = () => {
                                             {field.value ? (
                                                 format(field.value, "PPP")
                                             ) : (
-                                                <span>Pick a date</span>
+                                                <span>Selecteer een datum</span>
                                             )}
                                             <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                                         </Button>
@@ -120,8 +143,65 @@ export const AccountPage = () => {
                                 </PopoverContent>
                             </Popover>
                             <FormDescription>
-                                Your date of birth is used to calculate your
-                                age.
+                                We willen weten hoe oud je bent
+                            </FormDescription>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <h1 className="font-bold text-4xl">Wachtwoord Aanpassen</h1>
+                <FormField
+                    control={form.control}
+                    name="oldPassword"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Oude Wachtwoord</FormLabel>
+                            <FormControl>
+                                <Input
+                                    placeholder="Je oude wachtwoord"
+                                    {...field}
+                                />
+                            </FormControl>
+                            <FormDescription>
+                                Ik hoop dat je het nog weet
+                            </FormDescription>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="newPassword"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Nieuwe wachtwoord</FormLabel>
+                            <FormControl>
+                                <Input
+                                    placeholder="Je oude wachtwoord"
+                                    {...field}
+                                />
+                            </FormControl>
+                            <FormDescription>
+                                Bedenk iets nieuws
+                            </FormDescription>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="confirmPassword"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Wachtwoord bevestigen</FormLabel>
+                            <FormControl>
+                                <Input
+                                    placeholder="Je oude wachtwoord"
+                                    {...field}
+                                />
+                            </FormControl>
+                            <FormDescription>
+                                Wat je net invulde
                             </FormDescription>
                             <FormMessage />
                         </FormItem>

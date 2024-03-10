@@ -8,25 +8,25 @@ const SettingsLayout = () => {
     const { pathname } = location;
     const sidebarNavItems = [
         {
-            title: "Profile",
+            title: "Profiel",
             href: "/profile",
-            subtitle: "This is how others will see you on the site.",
+            subtitle: "Dit is je publieke profiel",
         },
         {
             title: "Account",
             href: "/profile/account",
             subtitle:
-                "Change your email, password, and other account settings.",
+                "Pas hier je accountinstellingen aan, zoals je e-mailadres en wachtwoord",
         },
         {
-            title: "Lending",
+            title: "Uitlenen",
             href: "/profile/lending",
-            subtitle: "view  your lending history",
+            subtitle: "Beheer hier je uitgeleende producten",
         },
         {
-            title: "Borrowing",
+            title: "Lenen",
             href: "/profile/borrowing",
-            subtitle: "view  your borrowing history",
+            subtitle: "Zie hier de producten die je hebt geleend",
         },
     ];
 
@@ -51,7 +51,7 @@ const SettingsLayout = () => {
                     <aside className="-mx-4 lg:w-1/5">
                         <SidebarNav items={sidebarNavItems} />
                     </aside>
-                    <div className="flex-1">
+                    <div className="flex-1 max-w-[30vw]">
                         <Outlet />
                     </div>
                 </div>

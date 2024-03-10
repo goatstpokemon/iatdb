@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 
 const BentoGrid = () => {
@@ -13,9 +14,12 @@ const BentoGrid = () => {
             >
                 <img src={product.image} alt={product.name} className="w-1/2" />
                 <h2 className="text-4xl mt-4">{product.name}</h2>
-                <Button className="mt-4" variant={"cta"} size={"lg"}>
+                <Link
+                    className="mt-4 p-2 bg-gray-900 text-white"
+                    to={"/product"}
+                >
                     Leen nu
-                </Button>
+                </Link>
             </div>
             <div
                 className={`row-span-1 rounded-xl  bg-gray-100 p-4 dark:bg-gray-900 h-[40vh] ${"col-span-2"}`}
