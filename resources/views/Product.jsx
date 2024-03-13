@@ -8,18 +8,13 @@ import {
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import Container from "@/components/ui/container";
-import {
-    Shield,
-    ShieldCheck,
-    ShieldCheckIcon,
-    Slash,
-    Star,
-} from "lucide-react";
+import { StarRating } from "@/components/ui/star-rating";
+import { Shield, Slash, Star } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const Product = () => {
-    const [stars, setStars] = useState(0);
+    const [stars, setStars] = useState(4);
     const [range, setRange] = useState([]);
     const product = {
         id: 1,
@@ -249,30 +244,10 @@ const Product = () => {
                             <div className="ml-4">
                                 <h4 className="font-bold text-md">Test test</h4>
                                 <div className="flex">
-                                    <Star
-                                        className="fill-yellow-400"
-                                        strokeWidth={0}
-                                        size={24}
-                                    />
-                                    <Star
-                                        className="fill-yellow-400"
-                                        strokeWidth={0}
-                                        size={24}
-                                    />
-                                    <Star
-                                        className="fill-yellow-400"
-                                        strokeWidth={0}
-                                        size={24}
-                                    />
-                                    <Star
-                                        className="fill-yellow-400"
-                                        strokeWidth={0}
-                                        size={24}
-                                    />
-                                    <Star
-                                        className="fill-gray-200"
-                                        strokeWidth={0}
-                                        size={24}
+                                    <StarRating
+                                        value={4}
+                                        setValue={setStars}
+                                        className={"fill-yellow-400"}
                                     />
 
                                     <p className="sr-only">4 sterren</p>
