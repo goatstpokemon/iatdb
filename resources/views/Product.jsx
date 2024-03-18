@@ -45,8 +45,8 @@ const Product = () => {
 
     return (
         <Container>
-            <div className="grid h-[60vh] max-w-[80rem] grid-cols-2 gap-10 py-16">
-                <div className="max-w-[32rem]">
+            <div className="lg:grid max-w-svw lg:h-[60vh] md:max-w-[80rem] lg:grid-cols-2 gap-10 py-16">
+                <section className="w-svw md:max-w-[32rem]">
                     <nav>
                         <Breadcrumb>
                             <BreadcrumbList>
@@ -79,7 +79,7 @@ const Product = () => {
                     </div>
                     <section className="mt-4 w-full">
                         <h2 className="sr-only">Product informatie</h2>
-                        <div className="flex divide-x items-center">
+                        <div className="flex md:flex-row flex-col md:divide-x md:items-center">
                             <div className="flex mr-4 items-end gap-1">
                                 <p className="text-2xl ">€ {product.price}</p>
                                 <p className="text-xl text-muted-foreground">
@@ -90,7 +90,7 @@ const Product = () => {
                                 <h2 className="sr-only">Reviews</h2>
                                 <div>
                                     {stars > 0 ? (
-                                        <div className="flex items-center ml-4">
+                                        <div className="flex  items-center md:ml-4">
                                             {Array.from(
                                                 { length: stars },
                                                 (_, index) => (
@@ -173,7 +173,7 @@ const Product = () => {
                             </Link>
                         </div>
                     </section>
-                </div>
+                </section>
                 <section>
                     <div className="rounded-lg">
                         <img
@@ -183,89 +183,95 @@ const Product = () => {
                         />
                     </div>
                 </section>
-            </div>
-            <section className="mt-20 py-32  max-w-[80rem] grid grid-cols-12">
-                <div className="col-span-4">
-                    <h2 className="font-bold text-4xl">Klanten Reviews</h2>
-                    <div className="mt-4">
-                        {stars > 0 ? (
-                            <div className="flex items-center">
-                                {Array.from({ length: stars }, (_, index) => (
-                                    <Star
-                                        key={index}
-                                        className="fill-yellow-400 h-8 w-8"
-                                        strokeWidth={0}
-                                        size={20}
-                                    />
-                                ))}
-                                {product.reviews.length && (
-                                    <span className="text-sm ml-2">
-                                        {product.reviews.length}
-                                        reviews
+                <section className="mt-20 py-32  max-w-[80rem] grid grid-cols-12">
+                    <div className="col-span-4">
+                        <h2 className="font-bold text-4xl">Klanten Reviews</h2>
+                        <div className="mt-4">
+                            {stars > 0 ? (
+                                <div className="flex items-center">
+                                    {Array.from(
+                                        { length: stars },
+                                        (_, index) => (
+                                            <Star
+                                                key={index}
+                                                className="fill-yellow-400 h-8 w-8"
+                                                strokeWidth={0}
+                                                size={10}
+                                            />
+                                        )
+                                    )}
+                                    {product.reviews.length && (
+                                        <span className="text-sm ml-2">
+                                            {product.reviews.length}
+                                            reviews
+                                        </span>
+                                    )}
+                                </div>
+                            ) : (
+                                <div className="flex items-center">
+                                    {Array.from({ length: 5 }, (_, index) => (
+                                        <Star
+                                            key={index}
+                                            className="fill-gray-200"
+                                            strokeWidth={0}
+                                            size={20}
+                                        />
+                                    ))}
+                                    <span className="text-sm ml-2 text-muted-foreground">
+                                        Geen reviews
                                     </span>
-                                )}
-                            </div>
-                        ) : (
+                                </div>
+                            )}
+                        </div>
+                        <div className="mt-10">
+                            <h3 className="text-xl">Deel je ervaring</h3>
+                            <p className="text-sm text-muted-foreground">
+                                Deel je ervaning met het lenen van een product.
+                                Zo help je weer de volgende persoon
+                            </p>
+                            <Button variant="outline" className="mt-4 w-full">
+                                Schrijf een review
+                            </Button>
+                        </div>
+                    </div>
+                    <div className="col-start-6 col-span-7">
+                        <h3 className="sr-only">Recente reviews</h3>
+                        <div className="">
                             <div className="flex items-center">
-                                {Array.from({ length: 5 }, (_, index) => (
-                                    <Star
-                                        key={index}
-                                        className="fill-gray-200"
-                                        strokeWidth={0}
-                                        size={20}
-                                    />
-                                ))}
-                                <span className="text-sm ml-2 text-muted-foreground">
-                                    Geen reviews
-                                </span>
-                            </div>
-                        )}
-                    </div>
-                    <div className="mt-10">
-                        <h3 className="text-xl">Deel je ervaring</h3>
-                        <p className="text-sm text-muted-foreground">
-                            Deel je ervaning met het lenen van een product. Zo
-                            help je weer de volgende persoon
-                        </p>
-                        <Button variant="outline" className="mt-4 w-full">
-                            Schrijf een review
-                        </Button>
-                    </div>
-                </div>
-                <div className="col-start-6 col-span-7">
-                    <h3 className="sr-only">Recente reviews</h3>
-                    <div className="">
-                        <div className="flex items-center">
-                            <img
-                                src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=8&amp;w=256&amp;h=256&amp;q=80"
-                                alt=""
-                                className="w-12 h-12 rounded-full"
-                            />
-                            <div className="ml-4">
-                                <h4 className="font-bold text-md">Test test</h4>
-                                <div className="flex">
-                                    <StarRating
-                                        value={4}
-                                        setValue={setStars}
-                                        className={"fill-yellow-400"}
-                                    />
+                                <img
+                                    src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=8&amp;w=256&amp;h=256&amp;q=80"
+                                    alt=""
+                                    className="w-12 h-12 rounded-full"
+                                />
+                                <div className="ml-4">
+                                    <h4 className="font-bold text-md">
+                                        Test test
+                                    </h4>
+                                    <div className="flex">
+                                        <StarRating
+                                            value={4}
+                                            setValue={setStars}
+                                            className={"fill-yellow-400"}
+                                        />
 
-                                    <p className="sr-only">4 sterren</p>
+                                        <p className="sr-only">4 sterren</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="mt-4 italic">
-                            <p className="text-muted-foreground">
-                                Lorem ipsum dolor sit amet consectetur
-                                adipisicing elit. Vel impedit inventore, earum
-                                nostrum porro dolorem asperiores? Est, quasi.
-                                Saepe laborum sequi iste repellat consequatur
-                                dolorem impedit, non aspernatur temporibus est!
-                            </p>
+                            <div className="mt-4 italic">
+                                <p className="text-muted-foreground">
+                                    Lorem ipsum dolor sit amet consectetur
+                                    adipisicing elit. Vel impedit inventore,
+                                    earum nostrum porro dolorem asperiores? Est,
+                                    quasi. Saepe laborum sequi iste repellat
+                                    consequatur dolorem impedit, non aspernatur
+                                    temporibus est!
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </div>
         </Container>
     );
 };
