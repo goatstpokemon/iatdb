@@ -19,6 +19,11 @@ const SettingsLayout = () => {
                 "Pas hier je accountinstellingen aan, zoals je e-mailadres en wachtwoord",
         },
         {
+            title: "Producten",
+            href: "/profile/products",
+            subtitle: "Al je producten die je hebt toegevoegd aan Time2Share",
+        },
+        {
             title: "Uitlenen",
             href: "/profile/lending",
             subtitle: "Beheer hier je uitgeleende producten",

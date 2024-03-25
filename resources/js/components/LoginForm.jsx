@@ -1,26 +1,21 @@
 import { cn } from "@/lib/utils";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import apiClient from "@/api";
-import { AuthContext } from "@/contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "@/contexts/AuthContext";
+import { Navigate } from "react-router-dom";
 
 export const LoginForm = ({ className, ...props }) => {
-    const history = useNavigate();
-
     const [isLoading, setIsLoading] = useState(false);
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const { SetAuth, isLoggedIn } = useContext(AuthContext);
-    useEffect(() => {
-        if (isLoggedIn === true) {
-            history("/");
-        }
-    }, [isLoggedIn]);
+    const { setUser, setToken, token } = useAuthContext();
+
     async function onSubmit(event) {
         event.preventDefault();
         setIsLoading(true);
@@ -33,17 +28,20 @@ export const LoginForm = ({ className, ...props }) => {
                         password,
                     })
                     .then((response) => {
-                        console.log(response);
                         setIsLoading(false);
                         if (response.status === 200) {
-                            SetAuth(response.data);
+                            console.log({ response });
+                            setUser(response.data.user);
+                            setToken(response.data.token);
                             toast("Je bent ingelogd!");
-                            history("/");
                         } else {
                             toast(
                                 "Er is iets fout gegaan, probeer het opnieuw"
                             );
                         }
+                    })
+                    .then(() => {
+                        window.location.replace("/");
                     })
                     .catch((error) => {
                         setIsLoading(false);

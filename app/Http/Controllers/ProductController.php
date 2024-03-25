@@ -65,7 +65,9 @@ class ProductController extends Controller
         $product->rentable = true;
         $product->rented_by = null;
         $product->save();
-        return redirect('/');
+        return response()->json([
+            'product' => $product
+        ], 200);
     }
     /**
      * Display the specified resource.
@@ -78,12 +80,12 @@ class ProductController extends Controller
         $owner = User::find($product->user_id);
         $rentee = User::find($product->rented_by);
         $currentUser = Auth::user();
-        return view('pages.products.show', [
+        return response()->json([
             'product' => $product,
             'owner' => $owner,
             'rentee' => $rentee,
             'currentUser' => $currentUser
-        ]);
+        ], 200);
     }
 
 
@@ -115,7 +117,9 @@ class ProductController extends Controller
                 'updatedProduct' => $product
             ], 200);
         } else {
-            return redirect('/products/' . $productId);
+            return response()->json([
+                'updatedProduct' => $product
+            ], 200);
         }
     }
 
@@ -134,12 +138,6 @@ class ProductController extends Controller
             'currentUser' => $currentUser
         ]);
     }
-    public function filter(Request $request)
-    {
-        $category = $request->route('category');
-        $products = Product::where('category', $category)->get();
-        return view('pages.products.filter', ['products' => $products]);
-    }
 
     public function borrowed()
     {
@@ -147,10 +145,9 @@ class ProductController extends Controller
         $products = $user->products;
 
 
-        return view('pages.products.borrowed', [
-            "products" => $products,
-            "user" => $user
-        ]);
+        return response()->json([
+            'products' => $products
+        ], 200);
     }
     public function borrowing()
     {
@@ -158,10 +155,9 @@ class ProductController extends Controller
         $rentedProducts = Product::where('rented_by', $user->id)->get();
 
 
-        return view('pages.products.borrowing', [
-            "products" => $rentedProducts,
-            "user" => $user
-        ]);
+        return response()->json([
+            'rentedProducts' => $rentedProducts
+        ], 200);
     }
     public function availible()
     {
@@ -177,7 +173,9 @@ class ProductController extends Controller
         $product->return_date = null;
         $product->rentable = 0;
         $product->save();
-        return redirect('/');
+        return response()->json([
+            'product' => $product
+        ], 200);
     }
 
 
@@ -193,7 +191,9 @@ class ProductController extends Controller
         $product->return_date = $request->end;
         $product->rentable = 0;
         $product->save();
-        return redirect('/');
+        return response()->json([
+            'product' => $product
+        ], 200);
     }
 
     /**
@@ -201,18 +201,10 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-
-        return $this->isNotAuthorised($product) ? $this->isNotAuthorised($product) :
+        $deleted = $this->isNotAuthorised($product) ? $this->isNotAuthorised($product) :
             $product->delete();
-    }
-
-    public function search(Request $request)
-    {
-        $q = $request->input('q');
-        $results = DB::table('products')
-            ->where('name', 'like', '%' . $q . '%')
-            ->orWhere('name', 'like', '%' . $q . '%')
-            ->get();
-        return view('pages.products.search', ['results' => $results]);
+        return response()->json([
+            'deleted' => $deleted
+        ], 200);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -21,6 +22,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'isBanned',
+        'isAdmin',
     ];
 
     /**
@@ -42,4 +45,24 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class, 'user_id');
+    }
+
+    public function rentedProducts()
+    {
+        return $this->hasMany(Product::class, 'rented_by');
+    }
+
+    public function lent_products()
+    {
+        return $this->hasMany(Lending::class, 'lender_id');
+    }
+
+    public function borrowed_products()
+    {
+        return $this->hasMany(Lending::class, 'borrower_id');
+    }
 }

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Controller
 {
@@ -65,5 +68,4 @@ class User extends Controller
 
         return response()->json(['user' => $user, 'products' => $products]);
     }
-}
 }

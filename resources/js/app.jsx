@@ -5,8 +5,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { AppWrapper } from "../views/Wrapper";
 import { Login } from "../views/Login";
 import { SignUp } from "../views/SignUp";
-import NavbarContextProvider from "./contexts/NavbarContext";
-import AuthContextProvider from "./contexts/AuthContext";
+import { NavbarContextProvider } from "./contexts/NavbarContext";
+
 import Borrow from "../views/Borrow";
 import Lend from "../views/Lend";
 import Home from "../views/Home";
@@ -18,6 +18,8 @@ import NotFound from "../views/404";
 import Product from "../views/Product";
 import LendingPage from "../views/cms/settings/lending/LendingPage";
 import AllUsers from "../views/admin/users/AllUsers";
+import { AuthContextProvider } from "./contexts/AuthContext";
+import YourProducts from "../views/cms/settings/products/YourProducts";
 
 ReactDOM.createRoot(document.getElementById("app")).render(
     <AuthContextProvider>
@@ -35,6 +37,7 @@ ReactDOM.createRoot(document.getElementById("app")).render(
                         <Route index path="" element={<ProfileWrapper />} />
                         <Route path="account" element={<AccountPage />} />
                         <Route path="lending" element={<LendingPage />} />
+                        <Route path="products" element={<YourProducts />} />
                     </Route>
                     <Route path="/login" element={<Login />} />
                     <Route path="/logout" element={<Logout />} />

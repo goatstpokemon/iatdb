@@ -1,16 +1,21 @@
 import { cn } from "@/lib/utils";
 import { LoginForm } from "@/components/LoginForm";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { buttonVariants } from "@/components/ui/button";
 import { Clock } from "lucide-react";
 import { Toaster } from "../js/components/ui/sonner";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import React, { useRef } from "react";
+import { useAuthContext } from "@/contexts/AuthContext";
 
 export const Login = () => {
     const imageRef = useRef();
     const tl = gsap.timeline();
+    const { user } = useAuthContext();
+    if (user.name) {
+        return <Navigate to="/" />;
+    }
     useGSAP(() => {
         tl.fromTo(
             ".topDown",

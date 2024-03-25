@@ -4,12 +4,12 @@ import { Overview } from "@/components/home/overview/Overview";
 import Borrowing from "@/components/home/borrowing/Borrowing";
 import Lending from "@/components/home/lending/Lending";
 import Aanvragen from "@/components/home/aanvragen/Aanvragen";
+import { useAuthContext } from "@/contexts/AuthContext";
+import { useEffect } from "react";
+import apiClient from "@/api";
 
 const Home = () => {
-    const user = {
-        name: "John Doe",
-    };
-
+    const { user } = useAuthContext();
     return (
         <div>
             <Container>
@@ -26,7 +26,7 @@ const Home = () => {
                             </TabsTrigger>
                         </TabsList>
                         <h2 className="text-3xl font-bold tracking-tight">
-                            Hello {user.name}
+                            Hello {user?.name}
                         </h2>
                         <TabsContent value="overview" className="space-y-4">
                             <Overview />

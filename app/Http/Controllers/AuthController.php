@@ -2,36 +2,49 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
+
 
 class AuthController extends Controller
 {
 
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        $credentials = $request->validate(['email' => 'required', 'password' => 'required']);
-        if (!Auth::attempt($credentials)) {
-            return ValidationException::withMessages(['email' => [
-                __('auth.failed')
-            ]]);
+        $data = $request->validated();
+        if (!Auth::attempt($data)) {
+            return response([
+                'message' => 'Email of wachtwoord is onjuist.'
+            ], 401);
+        } else {
+            $user = Auth::user();
+            $token = $user->createToken('auth_token')->plainTextToken;
+            return response()->json(['token' => $token, 'user' => $user]);
         }
         return $request->user();
     }
-    public function logout()
+
+
+    public function signup(RegisterRequest $request)
     {
-        Auth::logout();
+
+        $validated = $request->validated();
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => bcrypt($validated['password']),
+        ]);
+        $token = $user->createToken('auth_token')->plainTextToken;
+        return response()->json(['token' => $token, 'user' => $user]);
     }
 
-    public function signup(Request $request)
+    public function logout(Request $request)
     {
-        $user = User::create($request->validate([
-            'name' => 'required',
-            'email' => 'required|email',
-            'password' => 'required'
-        ]));
-        return $user;
+        $user = $request()->user();
+        $user->currentAccessToken()->delete();
+        return response('', 204);
     }
 }

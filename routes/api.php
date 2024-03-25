@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,10 +16,26 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
 
+
+// Public Auth Routes
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/signup', [AuthController::class, 'signup']);
-Route::post('/logout', [AuthController::class, 'logout']);
+
+// Private User Routes
+Route::middleware('auth:sanctum')->prefix('user')->group(function () {
+    Route::get('/{id}', [User::class, 'show']);
+    Route::put('/update', [User::class, 'update']);
+    Route::delete('/delete', [User::class, 'destroy']);
+    Route::get('/logout', [AuthController::class, 'logout']);
+    Route::get('/profile', [User::class, 'profile']);
+    Route::post('/profile/update', [User::class, 'updateProfile']);
+});
+
+// Private Product Routes
+
+// Private Lending Routes
+
+// Private Borrowing Routes
+
+// Private Review Routes

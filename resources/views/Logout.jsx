@@ -1,20 +1,23 @@
 import apiClient from "@/api";
-import { AuthContext } from "@/contexts/AuthContext";
-import React, { useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "@/contexts/AuthContext";
+import React, { useEffect } from "react";
 
 const Logout = () => {
-    const { Logout } = useContext(AuthContext);
-    const history = useNavigate();
+    const { setToken, setUser } = useAuthContext();
+
     useEffect(() => {
-        Logout();
-        apiClient.post("http://localhost:8000/api/logout");
-        setTimeout(() => {
-            history("/login");
-        }, 1000);
+        apiClient
+            .get("http://localhost:8000/api/logout")
+            .then(() => {
+                setToken(null);
+                setUser(null);
+            })
+            .then(() => {
+                window.location.replace("/login");
+            });
     }, []);
 
-    return <div>Je wordt doorverwzen naar de inlog pagina</div>;
+    return <div>Logging out...</div>;
 };
 
 export default Logout;

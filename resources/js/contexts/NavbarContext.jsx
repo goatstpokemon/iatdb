@@ -1,7 +1,10 @@
-import { createContext, useEffect, useState } from "react";
-export const NavbarContext = createContext();
+import { createContext, useContext, useEffect, useState } from "react";
+export const NavbarContext = createContext({
+    navItem: "Home",
+    Select: () => {},
+});
 
-const NavbarContextProvider = (props) => {
+export const NavbarContextProvider = (props) => {
     const [navItem, setNavItem] = useState("Home");
 
     const Select = (item) => {
@@ -15,4 +18,4 @@ const NavbarContextProvider = (props) => {
     );
 };
 
-export default NavbarContextProvider;
+export const useNavbarContext = () => useContext(NavbarContext);

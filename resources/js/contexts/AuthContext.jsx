@@ -1,31 +1,51 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
-export const AuthContext = createContext();
+export const AuthContext = createContext({
+    user: null,
+    token: null,
+    setUser: () => {},
+    setToken: () => {},
+    getUser: () => {},
+});
 
-const AuthContextProvider = (props) => {
-    const [user, setUser] = useState({});
-
-    const SetAuth = (user) => {
-        localStorage.setItem("loggedIn", true);
-        localStorage.setItem("user", JSON.stringify(user));
-        setUser(user);
+export const AuthContextProvider = ({ children }) => {
+    const [user, _setUser] = useState({});
+    const [token, _setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
+    const setToken = (token) => {
+        _setToken(token);
+        if (token) {
+            localStorage.setItem("ACCESS_TOKEN", token);
+        } else {
+            localStorage.removeItem("ACCESS_TOKEN");
+        }
     };
-    const Logout = () => {
-        setUser({});
-        localStorage.setItem("user", "");
-        localStorage.setItem("loggedIn", false);
+    const setUser = (user) => {
+        _setUser(user);
+        if (user) {
+            localStorage.setItem("user", JSON.stringify(user));
+        } else {
+            localStorage.removeItem("user");
+        }
     };
-    useEffect(() => {
+    const getUser = () => {
         const user = localStorage.getItem("user");
         if (user) {
-            setUser(JSON.parse(user));
+            _setUser(JSON.parse(user));
         }
-    }, []);
+    };
+
     return (
-        <AuthContext.Provider value={{ user, SetAuth, Logout }}>
-            {props.children}
+        <AuthContext.Provider
+            value={{
+                user,
+                token,
+                setUser,
+                setToken,
+                getUser,
+            }}
+        >
+            {children}
         </AuthContext.Provider>
     );
 };
-
-export default AuthContextProvider;
+export const useAuthContext = () => useContext(AuthContext);

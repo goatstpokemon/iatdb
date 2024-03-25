@@ -6,6 +6,7 @@ import { Button } from "./ui/button";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import apiClient from "@/api";
 import { toast } from "sonner";
+import { useAuthContext } from "@/contexts/AuthContext";
 
 export const SignUpForm = ({ className, ...props }) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -13,6 +14,7 @@ export const SignUpForm = ({ className, ...props }) => {
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
     const [passwordConfirmation, setPasswordConfirmation] = useState("");
+    const { setUser, setToken } = useAuthContext();
     const [type1, setType1] = useState("password");
     const [icon1, setIcon1] = useState(
         <EyeOff size={16} className="absolute mr-20" />
@@ -43,40 +45,26 @@ export const SignUpForm = ({ className, ...props }) => {
     async function onSubmit(event) {
         event.preventDefault();
         setIsLoading(true);
-
+        const payload = {
+            name,
+            email,
+            password,
+        };
         if (password === passwordConfirmation) {
+            console.log({ payload });
             apiClient
-                .get("http://localhost:8000/sanctum/csrf-cookie")
-                .then((response) => {
-                    apiClient
-                        .post("http://localhost:8000/api/signup", {
-                            email,
-                            password,
-                            name,
-                        })
-                        .then((response) => {
-                            console.log(response);
-                            setIsLoading(false);
-                            if (response.status === 201) {
-                                console.log("success");
-                                toast("Je bent geregistreerd!");
-                            } else {
-                                toast(
-                                    "Er is iets fout gegaan, probeer het opnieuw"
-                                );
-                            }
-                        })
-                        .catch((error) => {
-                            setIsLoading(false);
-                            toast(
-                                error.response.data.message ||
-                                    "Er is iets fout gegaan, probeer het opnieuw"
-                            );
-                        });
+                .post("/signup", payload)
+                .then(({ data }) => {
+                    setIsLoading(false);
+                    toast.success("Account aangemaakt");
+                    setUser(data.user);
+                    setToken(data.token);
+                })
+                .catch((error) => {
+                    const errorData = error.response.data;
+                    setIsLoading(false);
+                    toast.error("Er is iets misgegaan", errorData.message);
                 });
-        } else {
-            setIsLoading(false);
-            toast("Wachtwoorden komen niet overeen");
         }
     }
 
