@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-class User extends Controller
+
+
+class UserController extends Controller
 {
     public function editUser(Request $request)
     {
@@ -23,32 +26,33 @@ class User extends Controller
         dd($photo);
         $path = $photo->store('public/users');
         $user->profile_image = Storage::url($path);
+        $user->username = $request->username ?? $user->username;
         $user->save();
         return redirect('/');
     }
 
     public function editProfile(Request $request)
     {
-
         $request->validate([
-            'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif',
         ]);
         $id = Auth::user()->id;
-        $user = User::find($id);
+        $user = User::findOrFail($id);
         $user->name = $request->name ?? $user->name;
         $user->email = $request->email ?? $user->email;
+        $user->username = $request->username ?? $user->username;
         $photo = $request->file('photo');
         $path = $photo->store('public/users');
         $user->profile_image = Storage::url($path);
         $user->save();
-        response(200, 'Profile updated successfully');
+        return response()->json(['user' => $user, 'message' => 'Profile updated successfully', 200]);
     }
 
     public function profile()
     {
-        $user = Auth::user();
-
-        return response()->json($user);
+        $id = Auth::user()->id;
+        $user = User::findOrFail($id);
+        return response()->json(['user' => $user]);
     }
 
     public function index()
@@ -57,7 +61,7 @@ class User extends Controller
         $users = User::all();
 
 
-        return response()->json($users);
+        return response()->json(['users' => $users]);
     }
 
     public function show(Request $request)

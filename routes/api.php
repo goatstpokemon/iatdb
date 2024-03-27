@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\User;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,12 +24,12 @@ Route::post('/signup', [AuthController::class, 'signup']);
 
 // Private User Routes
 Route::middleware('auth:sanctum')->prefix('user')->group(function () {
-    Route::get('/{id}', [User::class, 'show']);
-    Route::put('/update', [User::class, 'update']);
-    Route::delete('/delete', [User::class, 'destroy']);
+    Route::put('/update', [UserController::class, 'update']);
+    Route::delete('/delete', [UserController::class, 'destroy']);
     Route::get('/logout', [AuthController::class, 'logout']);
-    Route::get('/profile', [User::class, 'profile']);
-    Route::post('/profile/update', [User::class, 'updateProfile']);
+    Route::get('/profile', [UserController::class, 'profile']);
+    Route::post('/profile/update', [UserController::class, 'editProfile']);
+    Route::get('/{id}', [UserController::class, 'show']);
 });
 
 // Private Product Routes

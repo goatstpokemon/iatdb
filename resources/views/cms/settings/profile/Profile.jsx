@@ -7,21 +7,17 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import { cn } from "@/lib/utils";
-import { useFieldArray, useForm } from "react-hook-form";
+
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Link } from "react-router-dom";
 import { toast } from "sonner";
-const ACCEPTED_IMAGE_TYPES = [
-    "image/jpeg",
-    "image/jpg",
-    "image/png",
-    "image/webp",
-];
+import { useEffect, useState } from "react";
+import apiClient from "@/api";
+
 const profileFormSchema = z.object({
     username: z
         .string()
@@ -31,31 +27,53 @@ const profileFormSchema = z.object({
         .max(30, {
             message: "Het moet korter zijn dan 30 karakters.",
         }),
-    profilePhoto: z
-        .any()
-        .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files[0].type), {
-            message: "Dit is geen geldig bestandstype.",
-        }),
-
-    bio: z.string().max(160).min(4),
+    profilePhoto: z.any(),
 });
+
 const Profile = () => {
+    const [profile, setProfile] = useState({});
+    const [image, setImage] = useState(null);
     const form = useForm({
         resolver: zodResolver(profileFormSchema),
         mode: "onChange",
+        defaultValues: {
+            username: profile.username,
+            profilePhoto: profile.profile_photo,
+        },
     });
+    useEffect(() => {
+        apiClient
+            .get("/user/profile", {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(
+                        "ACCESS_TOKEN"
+                    )}`,
+                },
+            })
+            .then((response) => {
+                setProfile(response.data);
+            });
+    }, []);
 
-    const onSubmit = (data) => {
-        toast({
-            title: "You submitted the following values:",
-            description: (
-                <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                    <code className="text-white">
-                        {JSON.stringify(data, null, 2)}
-                    </code>
-                </pre>
-            ),
-        });
+    const onSubmit = (data, image) => {
+        const form = new FormData();
+        form.append("photo", image.target[1].files[0]);
+        form.append("username", data.username);
+        apiClient
+            .post("/user/profile/update", form, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(
+                        "ACCESS_TOKEN"
+                    )}`,
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+            .then(() => {
+                toast({
+                    title: "Profiel bijgewerkt",
+                    description: "Je profiel is succesvol bijgewerkt",
+                });
+            });
     };
 
     return (
@@ -80,13 +98,20 @@ const Profile = () => {
                 />
                 <FormField
                     control={form.control}
-                    name="profilePicture"
+                    name="profilePhoto"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Profiel Foto</FormLabel>
                             <FormControl>
                                 <Input
                                     placeholder="upload een foto"
+                                    type="file"
+                                    onChange={(e) => {
+                                        const file = e.target[1].files[0];
+                                        setImage(file);
+                                        form.setValue("profilePhoto", file);
+                                    }}
+                                    accept="image/*"
                                     {...field}
                                 />
                             </FormControl>
@@ -97,26 +122,7 @@ const Profile = () => {
                         </FormItem>
                     )}
                 />
-                <FormField
-                    control={form.control}
-                    name="bio"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Bio</FormLabel>
-                            <FormControl>
-                                <Textarea
-                                    placeholder="Een beetje over jezelf"
-                                    className="resize-none"
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormDescription>
-                                Vertel eens wat over jezelf
-                            </FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                <img src={image?.target[1].files[0]} />
                 <Button type="submit">Update profiel</Button>
             </form>
         </Form>

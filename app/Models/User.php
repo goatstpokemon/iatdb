@@ -24,6 +24,7 @@ class User extends Authenticatable
         'password',
         'isBanned',
         'isAdmin',
+        'profile_image'
     ];
 
     /**

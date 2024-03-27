@@ -7,7 +7,7 @@ const Logout = () => {
 
     useEffect(() => {
         apiClient
-            .get("http://localhost:8000/api/logout")
+            .get("/logout")
             .then(() => {
                 setToken(null);
                 setUser(null);

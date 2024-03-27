@@ -5,8 +5,6 @@ import Borrowing from "@/components/home/borrowing/Borrowing";
 import Lending from "@/components/home/lending/Lending";
 import Aanvragen from "@/components/home/aanvragen/Aanvragen";
 import { useAuthContext } from "@/contexts/AuthContext";
-import { useEffect } from "react";
-import apiClient from "@/api";
 
 const Home = () => {
     const { user } = useAuthContext();
