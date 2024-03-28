@@ -41,9 +41,9 @@ class UserController extends Controller
         $user->name = $request->name ?? $user->name;
         $user->email = $request->email ?? $user->email;
         $user->username = $request->username ?? $user->username;
-        $photo = $request->file('photo');
-        $path = $photo->store('public/users');
-        $user->profile_image = Storage::url($path);
+        $photo = $request->file('photo') ?? null;
+        $path = $photo->store('public/users') ?? null;
+        $user->profile_image = Storage::url($path) ?? $user->profile_image;
         $user->save();
         return response()->json(['user' => $user, 'message' => 'Profile updated successfully', 200]);
     }

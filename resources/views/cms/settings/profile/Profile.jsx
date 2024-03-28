@@ -36,10 +36,6 @@ const Profile = () => {
     const form = useForm({
         resolver: zodResolver(profileFormSchema),
         mode: "onChange",
-        defaultValues: {
-            username: profile.username,
-            profilePhoto: profile.profile_photo,
-        },
     });
     useEffect(() => {
         apiClient
@@ -51,7 +47,8 @@ const Profile = () => {
                 },
             })
             .then((response) => {
-                setProfile(response.data);
+                setProfile(response.data.user);
+                form.setValue("username", response.data.user.username);
             });
     }, []);
 
@@ -75,58 +72,68 @@ const Profile = () => {
                 });
             });
     };
+    if (profile.username) {
+        return (
+            <Form {...form}>
+                <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="space-y-8"
+                >
+                    <FormField
+                        control={form.control}
+                        name="username"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Gebruikersnaam</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="shadcn" {...field} />
+                                </FormControl>
+                                <FormDescription>
+                                    Dit is je publiekelijke gebruikersnaam dus
+                                    let op wat je hier invult
+                                </FormDescription>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
 
-    return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                <FormField
-                    control={form.control}
-                    name="username"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Gebruikersnaam</FormLabel>
-                            <FormControl>
-                                <Input placeholder="shadcn" {...field} />
-                            </FormControl>
-                            <FormDescription>
-                                Dit is je publiekelijke gebruikersnaam dus let
-                                op wat je hier invult
-                            </FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="profilePhoto"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Profiel Foto</FormLabel>
-                            <FormControl>
-                                <Input
-                                    placeholder="upload een foto"
-                                    type="file"
-                                    onChange={(e) => {
-                                        const file = e.target[1].files[0];
-                                        setImage(file);
-                                        form.setValue("profilePhoto", file);
-                                    }}
-                                    accept="image/*"
-                                    {...field}
+                    <FormField
+                        control={form.control}
+                        name="profilePhoto"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Profiel Foto</FormLabel>
+                                <img
+                                    src={profile.profile_image}
+                                    alt="hello"
+                                    className="size-24 md:size-26 lg:size-32 rounded"
                                 />
-                            </FormControl>
-                            <FormDescription>
-                                Upload hier een profielfoto
-                            </FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <img src={image?.target[1].files[0]} />
-                <Button type="submit">Update profiel</Button>
-            </form>
-        </Form>
-    );
+                                <FormControl>
+                                    <Input
+                                        placeholder="upload een foto"
+                                        type="file"
+                                        onChange={(e) => {
+                                            const file = e.target[1].files[0];
+                                            setImage(file);
+                                            form.setValue("profilePhoto", file);
+                                        }}
+                                        accept="image/*"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormDescription>
+                                    Upload hier een profielfoto
+                                </FormDescription>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <Button type="submit">Update profiel</Button>
+                </form>
+            </Form>
+        );
+    }
 };
 
 export default Profile;

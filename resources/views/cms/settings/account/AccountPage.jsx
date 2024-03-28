@@ -21,6 +21,9 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import { useEffect, useState } from "react";
+import apiClient from "@/api";
+import { toast } from "sonner";
 
 const accountFormSchema = z.object({
     name: z
@@ -35,23 +38,66 @@ const accountFormSchema = z.object({
     dob: z.date({
         required_error: "Je moet een geboortedatum invullen.",
     }),
-    oldPassword: z.string({ message: "Je oude wachtwoord is verplicht." }),
-    newPassword: z.string().min(8, {
-        message: "Je wachtwoord moet minstens 8 karakters lang zijn.",
-    }),
+    oldPassword: z
+        .string({ message: "Je oude wachtwoord is verplicht." })
+        .optional(),
+    newPassword: z
+        .string()
+        .min(8, {
+            message: "Je wachtwoord moet minstens 8 karakters lang zijn.",
+        })
+        .optional(),
     confirmPassword: z
         .string()
+
         .refine((value, data) => value === data.newPassword, {
             message: "Je wachtwoorden komen niet overeen.",
-        }),
+        })
+        .optional(),
 });
 
 export const AccountPage = () => {
+    const [profile, setProfile] = useState({});
     const form = useForm({
         resolver: zodResolver(accountFormSchema),
     });
-
+    useEffect(() => {
+        apiClient
+            .get("/user/profile", {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(
+                        "ACCESS_TOKEN"
+                    )}`,
+                },
+            })
+            .then((response) => {
+                setProfile(response.data.user);
+                form.setValue("name", response.data.user.name);
+                form.setValue("email", response.data.user.email);
+                form.setValue("dob", response.data.user.dob);
+            });
+    }, []);
     const onSubmit = (data) => {
+        const form = new FormData();
+        form.append("name", data.name);
+        form.append("email", data.email);
+        form.append("dob", data.dob);
+
+        apiClient
+            .post("/user/profile/update", form, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(
+                        "ACCESS_TOKEN"
+                    )}`,
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+            .then(() => {
+                toast({
+                    title: "Profiel bijgewerkt",
+                    description: "Je profiel is succesvol bijgewerkt",
+                });
+            });
         toast({
             title: "Je hebt het volgende ingevuld:",
             description: (
@@ -132,8 +178,12 @@ export const AccountPage = () => {
                                 >
                                     <Calendar
                                         mode="single"
+                                        captionLayout="dropdown-buttons"
                                         selected={field.value}
                                         onSelect={field.onChange}
+                                        fromYear={1900}
+                                        defaultMonth={profile.dob}
+                                        toYear={new Date().getFullYear()}
                                         disabled={(date) =>
                                             date > new Date() ||
                                             date < new Date("1900-01-01")

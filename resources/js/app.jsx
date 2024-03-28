@@ -20,6 +20,7 @@ import LendingPage from "../views/cms/settings/lending/LendingPage";
 import AllUsers from "../views/admin/users/AllUsers";
 import { AuthContextProvider } from "./contexts/AuthContext";
 import YourProducts from "../views/cms/settings/products/YourProducts";
+import AddProduct from "../views/cms/settings/products/AddProduct";
 
 ReactDOM.createRoot(document.getElementById("app")).render(
     <AuthContextProvider>
@@ -38,6 +39,7 @@ ReactDOM.createRoot(document.getElementById("app")).render(
                         <Route path="account" element={<AccountPage />} />
                         <Route path="lending" element={<LendingPage />} />
                         <Route path="products" element={<YourProducts />} />
+                        <Route path="products/add" element={<AddProduct />} />
                     </Route>
                     <Route path="/login" element={<Login />} />
                     <Route path="/logout" element={<Logout />} />
