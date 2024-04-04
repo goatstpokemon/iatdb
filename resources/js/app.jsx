@@ -21,7 +21,9 @@ import AllUsers from "../views/admin/users/AllUsers";
 import { AuthContextProvider } from "./contexts/AuthContext";
 import YourProducts from "../views/cms/settings/products/YourProducts";
 import AddProduct from "../views/cms/settings/products/AddProduct";
-
+import EditProducts from "../views/cms/settings/products/EditProducts";
+import CategoryStore from "../views/shop/CategoryStore";
+import CategoriesList from "../views/shop/CategoriesList";
 ReactDOM.createRoot(document.getElementById("app")).render(
     <AuthContextProvider>
         <NavbarContextProvider>
@@ -29,10 +31,14 @@ ReactDOM.createRoot(document.getElementById("app")).render(
                 <Routes>
                     <Route exact path="/" element={<AppWrapper />}>
                         <Route index path="" element={<Home />} />
-                        <Route path="lenen" element={<Borrow />} />
+                        <Route path="lenen" element={<CategoriesList />} />
                         <Route path="verhuren" element={<Lend />} />
-                        <Route path="/product" element={<Product />} />
+                        <Route path="/product/:id" element={<Product />} />
                         <Route path="/admin/users" element={<AllUsers />} />
+                        <Route
+                            path="/products/categories/:id"
+                            element={<CategoryStore />}
+                        />
                     </Route>
                     <Route path="profile" element={<SettingsLayout />}>
                         <Route index path="" element={<ProfileWrapper />} />
@@ -40,7 +46,12 @@ ReactDOM.createRoot(document.getElementById("app")).render(
                         <Route path="lending" element={<LendingPage />} />
                         <Route path="products" element={<YourProducts />} />
                         <Route path="products/add" element={<AddProduct />} />
+                        <Route
+                            path="products/:id/edit"
+                            element={<EditProducts />}
+                        />
                     </Route>
+
                     <Route path="/login" element={<Login />} />
                     <Route path="/logout" element={<Logout />} />
                     <Route path="/aanmelden" element={<SignUp />} />

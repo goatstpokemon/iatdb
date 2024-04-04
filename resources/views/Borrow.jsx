@@ -9,7 +9,6 @@ const Borrow = () => {
         <Container>
             <h1 className="font-bold text-5xl mb-10 text-center">Lenen</h1>
             <BentoGrid />
-            <ProductList title={"Alle producten"} />
         </Container>
     );
 };

@@ -15,17 +15,21 @@ class UserController extends Controller
     public function editUser(Request $request)
     {
 
-        $request->validate([
-            'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+
         $id = $request->route('id');
         $user = User::find($id);
         $user->name = $request->name ?? $user->name;
         $user->email = $request->email;
-        $photo = $request->file('photo');
-        dd($photo);
-        $path = $photo->store('public/users');
-        $user->profile_image = Storage::url($path);
+        if ($request->file('photo')) {
+            $request->validate([
+                'photo' => 'required|image|mimes:jpeg,png,jpg,gif',
+            ]);
+            $photo = $request->file('photo');
+            $path = $photo->store('public/users');
+            $user->profile_image = Storage::url($path) ?? $user->profile_image;
+        } else {
+            $user->profile_image = $user->profile_image;
+        }
         $user->username = $request->username ?? $user->username;
         $user->save();
         return redirect('/');
@@ -33,17 +37,22 @@ class UserController extends Controller
 
     public function editProfile(Request $request)
     {
-        $request->validate([
-            'photo' => 'required|image|mimes:jpeg,png,jpg,gif',
-        ]);
+
         $id = Auth::user()->id;
         $user = User::findOrFail($id);
         $user->name = $request->name ?? $user->name;
         $user->email = $request->email ?? $user->email;
         $user->username = $request->username ?? $user->username;
-        $photo = $request->file('photo') ?? null;
-        $path = $photo->store('public/users') ?? null;
-        $user->profile_image = Storage::url($path) ?? $user->profile_image;
+        if ($request->file('photo')) {
+            $request->validate([
+                'photo' => 'required|image|mimes:jpeg,png,jpg,gif',
+            ]);
+            $photo = $request->file('photo');
+            $path = $photo->store('public/users');
+            $user->profile_image = Storage::url($path) ?? $user->profile_image;
+        } else {
+            $user->profile_image = $user->profile_image;
+        }
         $user->save();
         return response()->json(['user' => $user, 'message' => 'Profile updated successfully', 200]);
     }

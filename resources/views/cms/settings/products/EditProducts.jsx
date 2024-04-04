@@ -24,9 +24,10 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import apiClient from "@/api";
 import { toast } from "sonner";
+import { useParams } from "react-router-dom";
 
 const addProductSchema = z.object({
     name: z
@@ -45,26 +46,20 @@ const addProductSchema = z.object({
     category: z.string(),
 });
 
-const AddProduct = () => {
+const EditProducts = () => {
     const [productImg, setProductImg] = useState({});
-
+    const [product, setProduct] = useState({});
+    const { id } = useParams();
     const form = useForm({
         resolver: zodResolver(addProductSchema),
         mode: "onChange",
     });
-    function getImageData(file) {
-        const fileReader = new FileReader();
-        fileReader.onload = () => {
-            setProductImg(fileReader.result);
-        };
-        fileReader.readAsDataURL(file);
-        return fileReader.result;
-    }
 
     const categoryWatcher = useWatch({
         name: "category",
         control: form.control,
     });
+
     const handleOnDrop = (acceptedFiles) => {
         if (acceptedFiles && acceptedFiles.length > 0) {
             form.setValue("file", acceptedFiles[0]);
@@ -78,18 +73,26 @@ const AddProduct = () => {
             });
         }
     };
+    function getImageData(file) {
+        const fileReader = new FileReader();
+        fileReader.onload = () => {
+            setProductImg(fileReader.result);
+        };
+        fileReader.readAsDataURL(file);
+        return fileReader.result;
+    }
     const submitHandler = (data) => {
         console.log({ data });
         const form = new FormData();
         form.append("photo", data.file);
         form.append("name", data.name);
         form.append("description", data.description);
-        form.append("price", data.price);
+        form.append("price", parseFloat(data.price).toFixed(2));
         form.append("category", data.category);
         form.append("size", data.size);
         form.append("type", data.type);
         apiClient
-            .post("/product/create", form, {
+            .post(`/product/item/${id}/update`, form, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem(
                         "ACCESS_TOKEN"
@@ -98,12 +101,35 @@ const AddProduct = () => {
                 },
             })
             .then((response) => {
+                console.log(response.data);
                 toast.success("Product toegevoegd");
             })
             .catch((error) => {
                 toast.error("Er is iets mis gegaan");
             });
     };
+
+    useEffect(() => {
+        apiClient
+            .get(`/product/item/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(
+                        "ACCESS_TOKEN"
+                    )}`,
+                },
+            })
+            .then((response) => {
+                setProduct(response.data.product);
+                form.setValue("name", response.data.product.name);
+                form.setValue("description", response.data.product.description);
+                form.setValue("price", response.data.product.price);
+                form.setValue("category", response.data.product.category);
+                form.setValue("size", response.data.product.size);
+                form.setValue("type", response.data.product.type);
+                form.setValue("file", response.data.product.photo);
+            });
+    }, []);
+
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(submitHandler)}>
@@ -111,12 +137,10 @@ const AddProduct = () => {
                 <section className="flex h-fit justify-between mb-8">
                     <div className="flex items-center gap-3">
                         <Store />
-                        <h1 className="font-medium text-2xl">
-                            Voeg product toe
-                        </h1>
+                        <h1 className="font-medium text-2xl">Bewerk Product</h1>
                     </div>
                     <div>
-                        <Button type="submit">Voeg Product Toe</Button>
+                        <Button type="submit">Aanpassen</Button>
                     </div>
                 </section>
                 {/* General Info */}
@@ -258,12 +282,13 @@ const AddProduct = () => {
                             </h2>
                             <div className="my-2">
                                 <div className="rounded-md  w-[98%] aspect-square">
-                                    {form.watch("file") ? (
+                                    {form.watch("file") ||
+                                    product.product_image ? (
                                         <div className="flex items-center justify-center gap-3 p-4 relative">
-                                            {productImg && (
+                                            {product && (
                                                 <img
                                                     className="rounded-md  w-[98%] aspect-square"
-                                                    src={productImg}
+                                                    src={product.product_image}
                                                     alt="product img"
                                                 />
                                             )}
@@ -339,6 +364,7 @@ const AddProduct = () => {
                                             <Select
                                                 onValueChange={field.onChange}
                                                 defaultValue={field.value}
+                                                value={field.value}
                                             >
                                                 <FormControl>
                                                     <SelectTrigger>
@@ -369,4 +395,4 @@ const AddProduct = () => {
         </Form>
     );
 };
-export default AddProduct;
+export default EditProducts;

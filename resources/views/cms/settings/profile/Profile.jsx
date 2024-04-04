@@ -56,6 +56,7 @@ const Profile = () => {
         const form = new FormData();
         form.append("photo", image.target[1].files[0]);
         form.append("username", data.username);
+        console.log(image.target[1].files[0]);
         apiClient
             .post("/user/profile/update", form, {
                 headers: {

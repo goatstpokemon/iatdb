@@ -69,7 +69,7 @@ const Header = () => {
                         </div>
                     </SheetContent>
                 </Sheet>
-                <Link className="mr-6 hidden lg:flex" href="#">
+                <Link className="mr-6 hidden lg:flex" href="/">
                     <LogoIcon />
                     <span className="sr-only">Time2Share</span>
                 </Link>

@@ -1,7 +1,8 @@
 import { Skeleton } from "./ui/skeleton";
 
-const ProductList = ({ title }) => {
-    const isLoading = true;
+import { Link } from "react-router-dom";
+
+const ProductList = ({ title, data, isLoading }) => {
     if (isLoading) {
         return (
             <section className="mt-10">
@@ -24,17 +25,24 @@ const ProductList = ({ title }) => {
             <section className="mt-10">
                 <h1 className="text-4xl font-semibold">{title}</h1>
                 <div className="grid grid-cols-1 gap-4 mt-6 md:grid-cols-2 lg:grid-cols-3">
-                    {[...Array(6)].map((_, i) => (
-                        <div
+                    {data?.category.map((item, i) => (
+                        <Link
+                            to={`/product/${item.id}`}
                             key={i}
                             className=" rounded-xl dark:bg-neutral-900"
                         >
-                            <div className=" aspect-video h-40 bg-gray-100 mb-4 rounded-md"></div>
+                            <div className=" aspect-square h-40 bg-gray-100 mb-4 rounded-md">
+                                <img
+                                    src={item.product_image}
+                                    alt="product"
+                                    className="object-cover h-full w-full rounded-md"
+                                />
+                            </div>
                             <h2 className="text-xl font-semibold mb-1">
-                                Productnaam
+                                {item.name}
                             </h2>
-                            <p className="text-md font-normal">€ 10,00</p>
-                        </div>
+                            <p className="text-md font-normal">{item.price}</p>
+                        </Link>
                     ))}
                 </div>
             </section>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -25,7 +26,7 @@ Route::post('/signup', [AuthController::class, 'signup']);
 // Private User Routes
 Route::middleware('auth:sanctum')->prefix('user')->group(function () {
     Route::put('/update', [UserController::class, 'update']);
-    Route::delete('/delete', [UserController::class, 'destroy']);
+    Route::delete('{id}/delete', [UserController::class, 'destroy']);
     Route::get('/logout', [AuthController::class, 'logout']);
     Route::get('/profile', [UserController::class, 'profile']);
     Route::post('/profile/update', [UserController::class, 'editProfile']);
@@ -33,9 +34,21 @@ Route::middleware('auth:sanctum')->prefix('user')->group(function () {
 });
 
 // Private Product Routes
+// Route::middleware('auth:sanctum')->prefix('product')->group(function () {
 
+// });
 // Private Lending Routes
 
 // Private Borrowing Routes
 
 // Private Review Routes
+
+Route::controller(ProductController::class)->prefix('/product')->group(function () {
+    Route::get('',  'index');
+    Route::get('/yours', 'yours');
+    Route::get('/category/{category}', 'categoryItems'); // Change the route URL to include '/category'
+    Route::get('/item/{id}', 'show'); // Change the route URL to include '/item'
+    Route::post('/create', 'store');
+    Route::post('/item/{id}/update', 'update');
+    Route::delete('/item/{id}/delete',  'destroy');
+});
