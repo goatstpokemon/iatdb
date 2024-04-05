@@ -43,7 +43,7 @@ Route::middleware('auth:sanctum')->prefix('user')->group(function () {
 
 // Private Review Routes
 
-Route::controller(ProductController::class)->prefix('/product')->group(function () {
+Route::controller(ProductController::class)->middleware('auth:sanctum')->prefix('/product')->group(function () {
     Route::get('',  'index');
     Route::get('/yours', 'yours');
     Route::get('/category/{category}', 'categoryItems'); // Change the route URL to include '/category'

@@ -1,20 +1,25 @@
 import apiClient from "@/api";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
     CardDescription,
+    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
 import {
     DropdownMenu,
+    DropdownMenuCheckboxItem,
     DropdownMenuContent,
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
+    DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import {
+    Table,
     TableBody,
     TableCell,
     TableHead,
@@ -22,11 +27,26 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CircleFadingPlus, Table } from "lucide-react";
+import {
+    CircleFadingPlus,
+    ListFilter,
+    PlusCircle,
+    MoreHorizontal,
+    File,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 
 const YourProducts = () => {
     const [products, setProducts] = useState([]);
+    // const products = [
+    //     {
+    //         id: 1,
+    //         name: "Laser Lemonade Machine",
+    //         status: "draft",
+    //         image: "https://source.unsplash.com/64x64/?product",
+    //         price: "$499.99",
+    //     },
+    // ];
     useEffect(() => {
         apiClient
             .get("/product/yours", {
@@ -95,16 +115,7 @@ const YourProducts = () => {
                                             </DropdownMenuCheckboxItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
-                                    <Button
-                                        size="sm"
-                                        variant="outline"
-                                        className="h-8 gap-1"
-                                    >
-                                        <File className="h-3.5 w-3.5" />
-                                        <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                                            Export
-                                        </span>
-                                    </Button>
+
                                     <Button size="sm" className="h-8 gap-1">
                                         <PlusCircle className="h-3.5 w-3.5" />
                                         <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
@@ -132,14 +143,8 @@ const YourProducts = () => {
                                                         </span>
                                                     </TableHead>
                                                     <TableHead>Name</TableHead>
-                                                    <TableHead>
-                                                        Status
-                                                    </TableHead>
                                                     <TableHead className="hidden md:table-cell">
                                                         Price
-                                                    </TableHead>
-                                                    <TableHead className="hidden md:table-cell">
-                                                        Total Sales
                                                     </TableHead>
                                                     <TableHead className="hidden md:table-cell">
                                                         Created at
@@ -160,13 +165,13 @@ const YourProducts = () => {
                                                             height="64"
                                                             src={
                                                                 products[0]
-                                                                    .image
+                                                                    .product_image
                                                             }
                                                             width="64"
                                                         />
                                                     </TableCell>
                                                     <TableCell className="font-medium">
-                                                        Laser Lemonade Machine
+                                                        {products[0].name}
                                                     </TableCell>
                                                     <TableCell>
                                                         <Badge variant="outline">
@@ -174,13 +179,16 @@ const YourProducts = () => {
                                                         </Badge>
                                                     </TableCell>
                                                     <TableCell className="hidden md:table-cell">
-                                                        $499.99
+                                                        {products[0].price} /
+                                                        dag
                                                     </TableCell>
+
                                                     <TableCell className="hidden md:table-cell">
-                                                        25
-                                                    </TableCell>
-                                                    <TableCell className="hidden md:table-cell">
-                                                        2023-07-12 10:42 AM
+                                                        {new Date(
+                                                            products[0].created_at
+                                                        ).toLocaleDateString(
+                                                            "nl-NL"
+                                                        )}
                                                     </TableCell>
                                                     <TableCell>
                                                         <DropdownMenu>

@@ -46,7 +46,7 @@ class ProductController extends Controller
     {
 
         $user =  Auth::user();
-        dd($user->products);
+
         $products = $user->products;
 
         return response()->json([
