@@ -70,52 +70,7 @@ const YourProducts = () => {
                     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
                         <Tabs defaultValue="all">
                             <div className="flex items-center">
-                                <TabsList>
-                                    <TabsTrigger value="all">All</TabsTrigger>
-                                    <TabsTrigger value="active">
-                                        Active
-                                    </TabsTrigger>
-                                    <TabsTrigger value="draft">
-                                        Draft
-                                    </TabsTrigger>
-                                    <TabsTrigger
-                                        value="archived"
-                                        className="hidden sm:flex"
-                                    >
-                                        Archived
-                                    </TabsTrigger>
-                                </TabsList>
                                 <div className="ml-auto flex items-center gap-2">
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                            <Button
-                                                variant="outline"
-                                                size="sm"
-                                                className="h-8 gap-1"
-                                            >
-                                                <ListFilter className="h-3.5 w-3.5" />
-                                                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                                                    Filter
-                                                </span>
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end">
-                                            <DropdownMenuLabel>
-                                                Filter by
-                                            </DropdownMenuLabel>
-                                            <DropdownMenuSeparator />
-                                            <DropdownMenuCheckboxItem checked>
-                                                Active
-                                            </DropdownMenuCheckboxItem>
-                                            <DropdownMenuCheckboxItem>
-                                                Draft
-                                            </DropdownMenuCheckboxItem>
-                                            <DropdownMenuCheckboxItem>
-                                                Archived
-                                            </DropdownMenuCheckboxItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
-
                                     <Button size="sm" className="h-8 gap-1">
                                         <PlusCircle className="h-3.5 w-3.5" />
                                         <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
@@ -129,8 +84,7 @@ const YourProducts = () => {
                                     <CardHeader>
                                         <CardTitle>Products</CardTitle>
                                         <CardDescription>
-                                            Manage your products and view their
-                                            sales performance.
+                                            Al jouw producten
                                         </CardDescription>
                                     </CardHeader>
                                     <CardContent>
@@ -139,97 +93,88 @@ const YourProducts = () => {
                                                 <TableRow>
                                                     <TableHead className="hidden w-[100px] sm:table-cell">
                                                         <span className="sr-only">
-                                                            Image
+                                                            Fotos
                                                         </span>
                                                     </TableHead>
                                                     <TableHead>Name</TableHead>
                                                     <TableHead className="hidden md:table-cell">
-                                                        Price
+                                                        Prijs / dag
                                                     </TableHead>
                                                     <TableHead className="hidden md:table-cell">
-                                                        Created at
+                                                        Aangemaakt op
                                                     </TableHead>
                                                     <TableHead>
                                                         <span className="sr-only">
-                                                            Actions
+                                                            Bewerken
                                                         </span>
                                                     </TableHead>
                                                 </TableRow>
                                             </TableHeader>
                                             <TableBody>
-                                                <TableRow>
-                                                    <TableCell className="hidden sm:table-cell">
-                                                        <img
-                                                            alt="Product image"
-                                                            className="aspect-square rounded-md object-cover"
-                                                            height="64"
-                                                            src={
-                                                                products[0]
-                                                                    .product_image
-                                                            }
-                                                            width="64"
-                                                        />
-                                                    </TableCell>
-                                                    <TableCell className="font-medium">
-                                                        {products[0].name}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        <Badge variant="outline">
-                                                            Draft
-                                                        </Badge>
-                                                    </TableCell>
-                                                    <TableCell className="hidden md:table-cell">
-                                                        {products[0].price} /
-                                                        dag
-                                                    </TableCell>
+                                                {products.map((product) => (
+                                                    <TableRow>
+                                                        <TableCell className="hidden sm:table-cell">
+                                                            <img
+                                                                alt="Product image"
+                                                                className="aspect-square rounded-md object-cover"
+                                                                height="64"
+                                                                src={
+                                                                    product.product_image
+                                                                }
+                                                                width="64"
+                                                            />
+                                                        </TableCell>
+                                                        <TableCell className="font-medium">
+                                                            {product.name}
+                                                        </TableCell>
 
-                                                    <TableCell className="hidden md:table-cell">
-                                                        {new Date(
-                                                            products[0].created_at
-                                                        ).toLocaleDateString(
-                                                            "nl-NL"
-                                                        )}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        <DropdownMenu>
-                                                            <DropdownMenuTrigger
-                                                                asChild
-                                                            >
-                                                                <Button
-                                                                    aria-haspopup="true"
-                                                                    size="icon"
-                                                                    variant="ghost"
+                                                        <TableCell className="hidden md:table-cell">
+                                                            {product.price} /
+                                                            dag
+                                                        </TableCell>
+
+                                                        <TableCell className="hidden md:table-cell">
+                                                            {new Date(
+                                                                product.created_at
+                                                            ).toLocaleDateString(
+                                                                "nl-NL"
+                                                            )}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <DropdownMenu>
+                                                                <DropdownMenuTrigger
+                                                                    asChild
                                                                 >
-                                                                    <MoreHorizontal className="h-4 w-4" />
-                                                                    <span className="sr-only">
-                                                                        Toggle
-                                                                        menu
-                                                                    </span>
-                                                                </Button>
-                                                            </DropdownMenuTrigger>
-                                                            <DropdownMenuContent align="end">
-                                                                <DropdownMenuLabel>
-                                                                    Actions
-                                                                </DropdownMenuLabel>
-                                                                <DropdownMenuItem>
-                                                                    Edit
-                                                                </DropdownMenuItem>
-                                                                <DropdownMenuItem>
-                                                                    Delete
-                                                                </DropdownMenuItem>
-                                                            </DropdownMenuContent>
-                                                        </DropdownMenu>
-                                                    </TableCell>
-                                                </TableRow>
+                                                                    <Button
+                                                                        aria-haspopup="true"
+                                                                        size="icon"
+                                                                        variant="ghost"
+                                                                    >
+                                                                        <MoreHorizontal className="h-4 w-4" />
+                                                                        <span className="sr-only">
+                                                                            Toggle
+                                                                            menu
+                                                                        </span>
+                                                                    </Button>
+                                                                </DropdownMenuTrigger>
+                                                                <DropdownMenuContent align="end">
+                                                                    <DropdownMenuLabel>
+                                                                        Actions
+                                                                    </DropdownMenuLabel>
+                                                                    <DropdownMenuItem>
+                                                                        Edit
+                                                                    </DropdownMenuItem>
+                                                                    <DropdownMenuItem>
+                                                                        Delete
+                                                                    </DropdownMenuItem>
+                                                                </DropdownMenuContent>
+                                                            </DropdownMenu>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                ))}
                                             </TableBody>
                                         </Table>
                                     </CardContent>
-                                    <CardFooter>
-                                        <div className="text-xs text-muted-foreground">
-                                            Showing <strong>1-10</strong> of{" "}
-                                            <strong>32</strong> products
-                                        </div>
-                                    </CardFooter>
                                 </Card>
                             </TabsContent>
                         </Tabs>
