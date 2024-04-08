@@ -7,7 +7,6 @@ import { Login } from "../views/Login";
 import { SignUp } from "../views/SignUp";
 import { NavbarContextProvider } from "./contexts/NavbarContext";
 
-import Borrow from "../views/Borrow";
 import Lend from "../views/Lend";
 import Home from "../views/Home";
 import Logout from "../views/Logout";
@@ -17,13 +16,14 @@ import { AccountPage } from "../views/cms/settings/account/AccountPage";
 import NotFound from "../views/404";
 import Product from "../views/Product";
 import LendingPage from "../views/cms/settings/lending/LendingPage";
-import AllUsers from "../views/admin/users/AllUsers";
 import { AuthContextProvider } from "./contexts/AuthContext";
 import YourProducts from "../views/cms/settings/products/YourProducts";
 import AddProduct from "../views/cms/settings/products/AddProduct";
 import EditProducts from "../views/cms/settings/products/EditProducts";
 import CategoryStore from "../views/shop/CategoryStore";
 import CategoriesList from "../views/shop/CategoriesList";
+import ViewRequest from "../views/cms/settings/Requests/ViewRequest";
+import AllUsers from "../views/cms/admin/users/AllUsers";
 ReactDOM.createRoot(document.getElementById("app")).render(
     <AuthContextProvider>
         <NavbarContextProvider>
@@ -39,6 +39,7 @@ ReactDOM.createRoot(document.getElementById("app")).render(
                             path="/products/categories/:id"
                             element={<CategoryStore />}
                         />
+                        <Route path="request/:id" element={<ViewRequest />} />
                     </Route>
                     <Route path="profile" element={<SettingsLayout />}>
                         <Route index path="" element={<ProfileWrapper />} />

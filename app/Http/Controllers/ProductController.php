@@ -46,9 +46,7 @@ class ProductController extends Controller
     {
 
         $user =  Auth::user();
-
         $products = $user->products;
-
         return response()->json([
             'products' => $products
         ], 200);
@@ -225,8 +223,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        $deleted = $this->isNotAuthorised($product) ? $this->isNotAuthorised($product) :
-            $product->delete();
+        $product->delete();
+        $deleted = true;
         return response()->json([
             'deleted' => $deleted
         ], 200);
