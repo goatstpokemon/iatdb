@@ -22,8 +22,9 @@ import AddProduct from "../views/cms/settings/products/AddProduct";
 import EditProducts from "../views/cms/settings/products/EditProducts";
 import CategoryStore from "../views/shop/CategoryStore";
 import CategoriesList from "../views/shop/CategoriesList";
-import ViewRequest from "../views/cms/settings/Requests/ViewRequest";
+import ViewRequest from "../views/shop/Requests/ViewRequest";
 import AllUsers from "../views/cms/admin/users/AllUsers";
+import User from "../views/shop/User";
 ReactDOM.createRoot(document.getElementById("app")).render(
     <AuthContextProvider>
         <NavbarContextProvider>
@@ -35,6 +36,7 @@ ReactDOM.createRoot(document.getElementById("app")).render(
                         <Route path="verhuren" element={<Lend />} />
                         <Route path="/product/:id" element={<Product />} />
                         <Route path="/admin/users" element={<AllUsers />} />
+                        <Route path="users/:id" element={<User />} />
                         <Route
                             path="/products/categories/:id"
                             element={<CategoryStore />}

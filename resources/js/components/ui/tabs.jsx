@@ -1,41 +1,100 @@
-import * as React from "react"
-import * as TabsPrimitive from "@radix-ui/react-tabs"
+import * as React from "react";
+import * as TabsPrimitive from "@radix-ui/react-tabs";
+import { cva } from "class-variance-authority";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
-const Tabs = TabsPrimitive.Root
+const Tabs = TabsPrimitive.Root;
 
-const TabsList = React.forwardRef(({ className, ...props }, ref) => (
-  <TabsPrimitive.List
-    ref={ref}
-    className={cn(
-      "inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground",
-      className
-    )}
-    {...props} />
-))
-TabsList.displayName = TabsPrimitive.List.displayName
+const TabsListVariants = cva(" inline-flex items-center justify-start h-9", {
+    variants: {
+        variant: {
+            default: "rounded-lg bg-muted p-1",
+            underline: "border-b rounded-none bg-background gap-2 p-0",
+        },
+        size: {
+            default: "h-9",
+            sm: "h-8  text-xs",
+            lg: "h-10 ",
+            icon: "h-9 w-9",
+        },
+        width: {
+            default: "w-full",
+            fit: "w-fit",
+        },
+    },
+    defaultVariants: {
+        variant: "default",
+        size: "default",
+        width: "default",
+    },
+});
 
-const TabsTrigger = React.forwardRef(({ className, ...props }, ref) => (
-  <TabsPrimitive.Trigger
-    ref={ref}
-    className={cn(
-      "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm",
-      className
-    )}
-    {...props} />
-))
-TabsTrigger.displayName = TabsPrimitive.Trigger.displayName
+const TabsTriggerVariants = cva(
+    "inline-flex items-center justify-center whitespace-nowrap text-sm font-normal  transition-all disabled:pointer-events-none data-[state=active]:text-foreground px-3",
+    {
+        variants: {
+            variant: {
+                default:
+                    "data-[state=active]:bg-background ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 data-[state=active]:shadow disabled:opacity-50 rounded-md py-1",
+                underline:
+                    "bg-background border-b-2 border-background focus:border-primary ring-0 outline-none shadow-none data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary disabled:opacity-100 data-[state=active]:shadow-none rounded-none m-0 pt-1.5 pb-2 hover:bg-background-muted",
+            },
+            size: {
+                default: "",
+                sm: " text-xs",
+                lg: "",
+                icon: "h-9 w-9",
+            },
+            width: {
+                default: "w-full",
+                fit: "w-fit",
+            },
+        },
+        defaultVariants: {
+            variant: "default",
+            size: "default",
+            width: "default",
+        },
+    }
+);
+
+const TabsList = React.forwardRef(
+    ({ className, variant, size, width, ...props }, ref) => (
+        <TabsPrimitive.List
+            ref={ref}
+            className={cn(
+                TabsListVariants({ variant, size, width, className })
+            )}
+            {...props}
+        />
+    )
+);
+TabsList.displayName = TabsPrimitive.List.displayName;
+
+const TabsTrigger = React.forwardRef(
+    ({ className, variant, size, width, ...props }, ref) => (
+        <TabsPrimitive.Trigger
+            ref={ref}
+            className={cn(
+                TabsTriggerVariants({ variant, size, width, className })
+            )}
+            {...props}
+        />
+    )
+);
+TabsTrigger.displayName = TabsPrimitive.Trigger.displayName;
 
 const TabsContent = React.forwardRef(({ className, ...props }, ref) => (
-  <TabsPrimitive.Content
-    ref={ref}
-    className={cn(
-      "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-      className
-    )}
-    {...props} />
-))
-TabsContent.displayName = TabsPrimitive.Content.displayName
+    <TabsPrimitive.Content
+        ref={ref}
+        className={cn(
+            "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+            className
+        )}
+        {...props}
+    />
+));
+TabsContent.displayName = TabsPrimitive.Content.displayName;
 
-export { Tabs, TabsList, TabsTrigger, TabsContent }
+export { Tabs, TabsList, TabsTrigger, TabsContent };

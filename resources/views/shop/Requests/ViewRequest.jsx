@@ -92,7 +92,7 @@ const ViewRequest = () => {
                                 <div className="flex gap-2 my-2 items-center">
                                     <Button
                                         variant="green"
-                                        className="flex gap-2"
+                                        className="flex gap-2 hover:bg-green-300 hover:text-green-900"
                                     >
                                         {" "}
                                         <Check />
@@ -100,7 +100,7 @@ const ViewRequest = () => {
                                     </Button>
                                     <Button
                                         variant="red-subtle"
-                                        className="flex gap-2"
+                                        className="flex gap-2 hover:bg-red-600 hover:text-white"
                                     >
                                         <X />
                                         Afkeuren
