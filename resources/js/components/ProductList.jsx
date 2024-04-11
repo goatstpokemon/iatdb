@@ -25,7 +25,7 @@ const ProductList = ({ title, data, isLoading }) => {
             <section className="mt-10">
                 <h1 className="text-4xl font-semibold">{title}</h1>
                 <div className="grid grid-cols-1 gap-4 mt-6 md:grid-cols-2 lg:grid-cols-3">
-                    {data?.category.map((item, i) => (
+                    {data?.map((item, i) => (
                         <Link
                             to={`/product/${item.id}`}
                             key={i}

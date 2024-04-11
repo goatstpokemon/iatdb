@@ -4,25 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Models\Lending;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LendingsController extends Controller
 {
     //
 
-    public function store(Request $request, $productId)
+    public function store(Request $request)
     {
-        $userId = auth()->user()->id;
-        $lending = Lending::where('borrower_id', $userId)
-            ->where('product_id', $productId)
-            ->where('returned', true)
-            ->first();
+
+        $userId = Auth::user()->id;
+        $lending = new Lending;
+        $lending->borrower_id = $userId;
+        $lending->product_id = $request->product_id;
+        $lending->lending_date = $request->lending_date;
+        $lending->return_date = $request->return_date;
 
 
-        if (!$lending) {
-            return response()->response([
-                'message' => 'Je hebt dit product nooit geleend'
-            ]);
-        }
+        $lending->save();
+        return response()->json([
+            'lending' => $lending
+        ], 200);
     }
 
     public function returnProduct(Request $request, $productId)

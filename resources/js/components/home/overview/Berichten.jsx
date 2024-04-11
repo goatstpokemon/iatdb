@@ -1,6 +1,8 @@
+import { Link } from "react-router-dom";
 import { Button } from "../../ui/button";
 
 const Berichten = () => {
+    const id = 1;
     return (
         <div className="space-y-8">
             <div className="flex items-center">
@@ -28,7 +30,7 @@ const Berichten = () => {
                 </div>
                 <div className="ml-auto">
                     <Button size="sm" variant="primary">
-                        Bekijken
+                        <Link to={`/request/${id}`}>Bekijken</Link>
                     </Button>
                     <Button size="sm" variant="secondary">
                         Afkeuren

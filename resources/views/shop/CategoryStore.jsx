@@ -22,9 +22,10 @@ const CategoryStore = () => {
             })
             .then((res) => {
                 setIsLoading(false);
-                setData(res.data);
+                setData(res.data.category);
             });
     }, []);
+    console.log({ data });
     if (!isLoading) {
         return (
             <>

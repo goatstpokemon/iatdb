@@ -1,4 +1,5 @@
 import apiClient from "@/api";
+import ReviewComponent from "@/components/ReviewComponent";
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -9,7 +10,7 @@ import {
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import Container from "@/components/ui/container";
-import { StarRating } from "@/components/ui/star-rating";
+import { toast } from "sonner";
 import { Loader, Shield, Slash, Star } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -19,7 +20,13 @@ const Product = () => {
     const [stars, setStars] = useState(4);
     const [range, setRange] = useState([]);
     const [data, setData] = useState([]);
-
+    const user = JSON.parse(localStorage.getItem("user"));
+    const [borrowingData, setBorrowingData] = useState({
+        lending_date: new Date().toISOString(),
+        return_date: new Date().toISOString(),
+        borrower_id: user.id,
+        product_id: id,
+    });
     const [isLoading, setIsLoading] = useState(true);
     const product = {
         reviews: [
@@ -50,8 +57,27 @@ const Product = () => {
             });
         calcStars(product.reviews);
     }, []);
-    console.log({ data });
+    console.log({ rangeFrom: range.from, rangeTo: range.to });
     const handleResetClick = () => setRange([]);
+    const borrowProduct = () => {
+        setBorrowingData({
+            lending_date: new Date(range.from),
+            return_date: new Date(range.to),
+            ...borrowingData,
+        });
+        apiClient
+            .post(`/lending/create`, borrowingData, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(
+                        "ACCESS_TOKEN"
+                    )}`,
+                },
+            })
+            .then((res) => {
+                toast("Lening aangevraagd" + " " + res.data.message, "success");
+            });
+    };
+    console.log({ borrowingData });
     if (isLoading) {
         return <Loader className="w-10 h-10" />;
     } else {
@@ -164,6 +190,7 @@ const Product = () => {
                             </div>
                             <div className="flex flex-col items-center max-w-fit">
                                 <Button
+                                    onClick={() => borrowProduct()}
                                     className={
                                         "mt-10 w-[25rem] h-12 bg-emerald-600"
                                     }
@@ -242,49 +269,10 @@ const Product = () => {
                                     Deel je ervaning met het lenen van een
                                     product. Zo help je weer de volgende persoon
                                 </p>
-                                <Button
-                                    variant="outline"
-                                    className="mt-4 w-full"
-                                >
-                                    Schrijf een review
-                                </Button>
                             </div>
                         </div>
                         <div className="col-start-6 col-span-7">
-                            <h3 className="sr-only">Recente reviews</h3>
-                            <div className="">
-                                <div className="flex items-center">
-                                    <img
-                                        src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=8&amp;w=256&amp;h=256&amp;q=80"
-                                        alt=""
-                                        className="w-12 h-12 rounded-full"
-                                    />
-                                    <div className="ml-4">
-                                        <h4 className="font-bold text-md">
-                                            Test test
-                                        </h4>
-                                        <div className="flex">
-                                            <StarRating
-                                                value={4}
-                                                setValue={setStars}
-                                                className={"fill-yellow-400"}
-                                            />
-
-                                            <p className="sr-only">4 sterren</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="mt-4 italic">
-                                    <p className="text-muted-foreground">
-                                        Lorem ipsum dolor sit amet consectetur
-                                        adipisicing elit. Vel impedit inventore,
-                                        earum nostrum porro dolorem asperiores?
-                                        Est, quasi. Saepe laborum sequi iste
-                                        repellat consequatur dolorem impedit,
-                                        non aspernatur temporibus est!
-                                    </p>
-                                </div>
-                            </div>
+                            <ReviewComponent />
                         </div>
                     </section>
                 </div>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LendingsController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -48,7 +49,7 @@ Route::controller(ProductController::class)->middleware('auth:sanctum')->prefix(
 });
 
 // Private Lending Routes
-Route::controller(LendingController::class)->middleware('auth:sanctum')->prefix('/lending')->group(function () {
+Route::controller(LendingsController::class)->middleware('auth:sanctum')->prefix('/lending')->group(function () {
     Route::get('',  'index');
     Route::get('/yours', 'yours');
     Route::get('/category/{category}', 'categoryItems'); // Change the route URL to include '/category'
