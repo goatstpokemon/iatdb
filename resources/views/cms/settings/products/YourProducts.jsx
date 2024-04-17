@@ -26,11 +26,12 @@ import {
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { CircleFadingPlus, PlusCircle, MoreHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const YourProducts = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
     // const products = [
     //     {
     //         id: 1,
@@ -79,7 +80,11 @@ const YourProducts = () => {
                     <Tabs defaultValue="all">
                         <div className="flex items-center">
                             <div className="ml-auto flex items-center gap-2">
-                                <Button size="sm" className="h-8 gap-1">
+                                <Button
+                                    size="sm"
+                                    className="h-8 gap-1"
+                                    onClick={navigate("/add")}
+                                >
                                     <PlusCircle className="h-3.5 w-3.5" />
                                     <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                                         Add Product
@@ -205,6 +210,7 @@ const YourProducts = () => {
 export default YourProducts;
 
 const NoProducts = () => {
+    const navigate = useNavigate();
     return (
         <main className="min-w-full min-h-full flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 ">
             <div className="flex items-center">
@@ -220,7 +226,10 @@ const NoProducts = () => {
                     <p className="text-sm text-muted-foreground">
                         Je kan beginnen met uitlenen als je producten toevoegt.
                     </p>
-                    <Button className="mt-4 flex gap-5">
+                    <Button
+                        className="mt-4 flex gap-5"
+                        onClick={() => navigate("add")}
+                    >
                         <CircleFadingPlus />
                         Voeg product toe
                     </Button>

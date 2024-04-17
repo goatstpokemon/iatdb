@@ -17,15 +17,15 @@ return new class extends Migration
             $table->string('name');
             $table->string('description');
             $table->string('product_image');
+            $table->unsignedBigInteger('category');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->boolean('rentable');
-            $table->dateTime('return_date')->nullable();
-            $table->dateTime('rental_started')->nullable();
-            $table->unsignedBigInteger('rented_by')->nullable();
-            $table->foreign('rented_by')->references('id')->on('users')->onDelete('cascade');
-            $table->boolean('checked')->nullable();
-            $table->string('category');
+            $table->foreign('category')->references('id')->on('categories')->onDelete('cascade');
+            $table->boolean('rentable')->default(true);
             $table->boolean('returned')->default(false);
+            $table->decimal('price', 8, 2)->default(0.00);
+            $table->boolean('checked')->nullable();
+            $table->string('size')->nullable();
+            $table->string('type')->nullable();
             $table->timestamps();
         });
     }

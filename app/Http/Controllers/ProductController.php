@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Resources\ProductResource;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
 use App\Traits\HttpResponses;
@@ -59,16 +60,16 @@ class ProductController extends Controller
         $request->validate([
             'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+        $category = Category::where('name', $request->category)->first();
         $product = new Product;
         $product->user_id = Auth::user()->id;
         $product->name = $request->name;
         $product->description = $request->description;
-        $product->category = $request->category;
+        $product->category = $category->id;
         $photo = $request->file('photo');
         $path = $photo->store('public/products');
         $product->product_image = Storage::url($path);
         $product->rentable = true;
-        $product->rented_by = null;
         $product->save();
         return response()->json([
             'product' => $product
@@ -154,7 +155,8 @@ class ProductController extends Controller
     {
 
         $category = $request->route('category');
-        $category = Product::where('category', $category)->get();
+        $category = Category::where('name', $category)->first();
+        $category = Product::where('category', $category->id)->get();
         return response()->json([
             'category' => $category
         ]);

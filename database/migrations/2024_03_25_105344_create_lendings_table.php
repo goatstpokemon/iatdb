@@ -13,12 +13,17 @@ return new class extends Migration
     {
         Schema::create('lendings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('borrower_id')->constrained('users');
-            $table->foreignId('product_id')->constrained('products');
+            $table->unsignedBigInteger('borrower_id');
+            $table->unsignedBigInteger('product_id');
+            $table->foreign('borrower_id')->references('id')->on('users')
+                ->onDelete('cascade');
+            $table->foreign('product_id')->references('id')->on('products')
+                ->onDelete('cascade');
             $table->boolean('returned')->default(false);
-            $table->dateTime('returned_at')->nullable();
-            $table->dateTime('return_date');
-            $table->dateTime('lending_date');
+            $table->date('returned_at')->nullable();
+            $table->date('return_date');
+            $table->date('lending_date');
+            $table->boolean('accepeted')->default(false);
             $table->timestamps();
         });
     }

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lending;
+use App\Models\Product;
+use DateTime;
+use DateTimeZone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,13 +17,17 @@ class LendingsController extends Controller
     {
 
         $userId = Auth::user()->id;
+        $returnDate = strtotime($request->return_date);
+        $lendingDate = strtotime($request->lending_date);
         $lending = new Lending;
         $lending->borrower_id = $userId;
         $lending->product_id = $request->product_id;
-        $lending->lending_date = $request->lending_date;
-        $lending->return_date = $request->return_date;
-
-
+        $lending->return_date = date('Y-m-d H:i:s', $returnDate);
+        $lending->lending_date = date('Y-m-d H:i:s', $lendingDate);
+        $product = Product::find($request->product_id);
+        $product->rented_by = $userId;
+        $product->checked = false;
+        $product->save();
         $lending->save();
         return response()->json([
             'lending' => $lending
