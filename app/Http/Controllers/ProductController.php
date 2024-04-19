@@ -113,10 +113,6 @@ class ProductController extends Controller
             $product->product_image = $product->product_image;
         }
         $product->rentable = $request->rentable ?? $product->rentable;
-        $product->rented_by = $request->rented_by ?? $product->rented_by;
-        $product->rental_started = $request->rental_started ?? $product->rental_started;
-        $product->return_date = $request->return_date ?? $product->return_date;
-        $product->returned = $request->returned ?? $product->returned;
         $product->price = $request->price ?? $product->price;
         $product->category = $request->category ?? $product->category;
         $product->type = $request->type ?? $product->type;

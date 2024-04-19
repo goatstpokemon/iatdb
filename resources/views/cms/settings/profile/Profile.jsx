@@ -73,7 +73,7 @@ const Profile = () => {
                 });
             });
     };
-    if (profile.username) {
+    if (profile.email) {
         return (
             <Form {...form}>
                 <form

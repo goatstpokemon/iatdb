@@ -39,20 +39,30 @@ const addProductSchema = z.object({
             message: "Het moet korter zijn dan 30 karakters.",
         }),
     description: z.string(),
-    size: z.string().optional(),
-    type: z.string().optional(),
     file: z.any(),
     price: z.string().transform((v) => Number(v) || 0),
     category: z.string(),
+    size: z.string().optional().nullable(),
+    type: z.string().optional().nullable(),
 });
 
 const EditProducts = () => {
     const [productImg, setProductImg] = useState({});
     const [product, setProduct] = useState({});
+
     const { id } = useParams();
     const form = useForm({
         resolver: zodResolver(addProductSchema),
         mode: "onChange",
+        defaultValues: {
+            name: "",
+            description: "",
+            price: "",
+            category: "",
+            size: "",
+            type: "",
+            file: null,
+        },
     });
 
     const categoryWatcher = useWatch({
@@ -89,8 +99,8 @@ const EditProducts = () => {
         form.append("description", data.description);
         form.append("price", parseFloat(data.price).toFixed(2));
         form.append("category", data.category);
-        form.append("size", data.size);
-        form.append("type", data.type);
+        if (data.size) form.append("size", data.size);
+        if (data.type) form.append("type", data.type);
         apiClient
             .post(`/product/item/${id}/update`, form, {
                 headers: {
@@ -129,7 +139,7 @@ const EditProducts = () => {
                 form.setValue("file", response.data.product.photo);
             });
     }, []);
-
+    console.log(form.formState.errors);
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(submitHandler)}>
