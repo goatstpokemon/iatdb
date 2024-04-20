@@ -1,4 +1,5 @@
 import apiClient from "@/api";
+import { categoriesColums } from "@/components/table/CategoriesColumns";
 import { productColums } from "@/components/table/ProductColumns";
 import { userColumns } from "@/components/table/UserColumns";
 import { DataTable } from "@/components/table/data-table";
@@ -10,11 +11,11 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
-const AllProducts = () => {
+const AllCategories = () => {
     const [data, setData] = useState([]);
     useEffect(() => {
         apiClient
-            .get("/product", {
+            .get("/categories", {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem(
                         "ACCESS_TOKEN"
@@ -121,11 +122,11 @@ const AllProducts = () => {
                     </div>
                 </div>
                 <h1 className="font-bold text-white text-5xl ml-10">
-                    Producten
+                    Categorieen
                 </h1>
             </div>
-            <DataTable columns={productColums} data={data} />
+            <DataTable columns={categoriesColums} data={data} />
         </div>
     );
 };
-export default AllProducts;
+export default AllCategories;

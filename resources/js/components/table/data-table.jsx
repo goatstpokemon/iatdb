@@ -39,16 +39,29 @@ export function DataTable({ columns, data }) {
     return (
         <div className="">
             <div className="flex items-center py-4">
-                <Input
-                    placeholder="Filter emails..."
-                    value={table.getColumn("email")?.getFilterValue() ?? ""}
-                    onChange={(event) =>
-                        table
-                            .getColumn("email")
-                            ?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-sm"
-                />
+                {columns[0].email ? (
+                    <Input
+                        placeholder="Filter emails..."
+                        value={table.getColumn("email")?.getFilterValue() ?? ""}
+                        onChange={(event) =>
+                            table
+                                .getColumn("email")
+                                ?.setFilterValue(event.target.value)
+                        }
+                        className="max-w-sm"
+                    />
+                ) : (
+                    <Input
+                        placeholder="Filter product..."
+                        value={table.getColumn("name")?.getFilterValue() ?? ""}
+                        onChange={(event) =>
+                            table
+                                .getColumn("email")
+                                ?.setFilterValue(event.target.value)
+                        }
+                        className="max-w-sm"
+                    />
+                )}
             </div>
             <div className="rounded-md border">
                 <Table>
@@ -82,14 +95,27 @@ export function DataTable({ columns, data }) {
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>
-                                            <Link
-                                                to={`/admin/users/${row.original.id}`}
-                                            >
-                                                {flexRender(
-                                                    cell.column.columnDef.cell,
-                                                    cell.getContext()
-                                                )}
-                                            </Link>
+                                            {columns[0].email ? (
+                                                <Link
+                                                    to={`/admin/users/${row.original.id}`}
+                                                >
+                                                    {flexRender(
+                                                        cell.column.columnDef
+                                                            .cell,
+                                                        cell.getContext()
+                                                    )}
+                                                </Link>
+                                            ) : (
+                                                <Link
+                                                    to={`/admin/products/${row.original.id}`}
+                                                >
+                                                    {flexRender(
+                                                        cell.column.columnDef
+                                                            .cell,
+                                                        cell.getContext()
+                                                    )}
+                                                </Link>
+                                            )}
                                         </TableCell>
                                     ))}
                                 </TableRow>

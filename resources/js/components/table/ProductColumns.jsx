@@ -1,6 +1,6 @@
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "../ui/button";
-export const columns = [
+export const productColums = [
     {
         accessorKey: "id",
         header: ({ column }) => {
@@ -27,14 +27,14 @@ export const columns = [
                         column.toggleSorting(column.getIsSorted() === "asc")
                     }
                 >
-                    Name
+                    Naam
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
             );
         },
     },
     {
-        accessorKey: "email",
+        accessorKey: "price",
         header: ({ column }) => {
             return (
                 <Button
@@ -43,7 +43,7 @@ export const columns = [
                         column.toggleSorting(column.getIsSorted() === "asc")
                     }
                 >
-                    Email
+                    Prijs
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
             );

@@ -58,6 +58,13 @@ Route::controller(LendingsController::class)->middleware('auth:sanctum')->prefix
     Route::post('/item/{id}/update', 'update');
     Route::delete('/item/{id}/delete',  'destroy');
 });
+Route::controller(LendingsController::class)->middleware('auth:sanctum')->prefix('/categories')->group(function () {
+    Route::get('',  'index');
+    Route::get('/:id', 'show');
+    Route::get('/:id/edit', 'edit');
+});
+// Private Category Routes
+
 // Private Borrowing Routes
 
 // Private Review Routes

@@ -25,6 +25,10 @@ import CategoriesList from "../views/shop/CategoriesList";
 import ViewRequest from "../views/shop/Requests/ViewRequest";
 import AllUsers from "../views/cms/admin/users/AllUsers";
 import User from "../views/shop/User";
+import AdminDashboard from "../views/cms/admin/AdminDashboard";
+import AllProducts from "../views/cms/admin/products/AllProducts";
+import AdminEditProducts from "../views/cms/admin/products/EditProducts";
+import AllCategories from "../views/cms/admin/categories/AllCategories";
 ReactDOM.createRoot(document.getElementById("app")).render(
     <AuthContextProvider>
         <NavbarContextProvider>
@@ -35,12 +39,30 @@ ReactDOM.createRoot(document.getElementById("app")).render(
                         <Route path="lenen" element={<CategoriesList />} />
                         <Route path="verhuren" element={<Lend />} />
                         <Route path="/product/:id" element={<Product />} />
-                        <Route path="/admin/users" element={<AllUsers />} />
                         <Route path="users/:id" element={<User />} />
+                        <Route path="/admin" element={<AdminDashboard />} />
+                        <Route path="/admin/users" element={<AllUsers />} />
+                        <Route
+                            path="/admin/products"
+                            element={<AllProducts />}
+                        />
+                        <Route
+                            path="/admin/products/:id"
+                            element={<AdminEditProducts />}
+                        />
+                        <Route
+                            path="/admin/categories/:id"
+                            element={<AdminEditProducts />}
+                        />
+                        <Route
+                            path="/admin/categories"
+                            element={<AllCategories />}
+                        />
                         <Route
                             path="/products/categories/:id"
                             element={<CategoryStore />}
                         />
+
                         <Route path="request/:id" element={<ViewRequest />} />
                     </Route>
                     <Route path="profile" element={<SettingsLayout />}>
