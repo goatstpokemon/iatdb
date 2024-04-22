@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\LendingsController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
@@ -58,9 +59,10 @@ Route::controller(LendingsController::class)->middleware('auth:sanctum')->prefix
     Route::post('/item/{id}/update', 'update');
     Route::delete('/item/{id}/delete',  'destroy');
 });
-Route::controller(LendingsController::class)->middleware('auth:sanctum')->prefix('/categories')->group(function () {
+Route::controller(CategoryController::class)->middleware('auth:sanctum')->prefix('/categories')->group(function () {
     Route::get('',  'index');
     Route::get('/:id', 'show');
+    Route::post('/add', 'store');
     Route::get('/:id/edit', 'edit');
 });
 // Private Category Routes

@@ -29,6 +29,7 @@ import AdminDashboard from "../views/cms/admin/AdminDashboard";
 import AllProducts from "../views/cms/admin/products/AllProducts";
 import AdminEditProducts from "../views/cms/admin/products/EditProducts";
 import AllCategories from "../views/cms/admin/categories/AllCategories";
+import AddCategory from "../views/cms/admin/categories/AddCategory";
 ReactDOM.createRoot(document.getElementById("app")).render(
     <AuthContextProvider>
         <NavbarContextProvider>
@@ -47,16 +48,20 @@ ReactDOM.createRoot(document.getElementById("app")).render(
                             element={<AllProducts />}
                         />
                         <Route
-                            path="/admin/products/:id"
+                            path="/admin/products/:id/edit"
                             element={<AdminEditProducts />}
                         />
                         <Route
-                            path="/admin/categories/:id"
+                            path="/admin/categories/:id/edit"
                             element={<AdminEditProducts />}
                         />
                         <Route
                             path="/admin/categories"
                             element={<AllCategories />}
+                        />
+                        <Route
+                            path="/admin/categories/add"
+                            element={<AddCategory />}
                         />
                         <Route
                             path="/products/categories/:id"

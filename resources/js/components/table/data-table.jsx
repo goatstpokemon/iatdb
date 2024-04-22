@@ -19,7 +19,7 @@ import {
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
-export function DataTable({ columns, data }) {
+export function DataTable({ columns, data, button }) {
     const [sorting, setSorting] = useState([]);
     const [columnFilters, setColumnFilters] = useState([]);
     const table = useReactTable({
@@ -38,7 +38,7 @@ export function DataTable({ columns, data }) {
 
     return (
         <div className="">
-            <div className="flex items-center py-4">
+            <div className="flex items-center py-4 gap-5">
                 {columns[0].email ? (
                     <Input
                         placeholder="Filter emails..."
@@ -50,13 +50,24 @@ export function DataTable({ columns, data }) {
                         }
                         className="max-w-sm"
                     />
+                ) : columns[1].name ? (
+                    <Input
+                        placeholder="Filter categorieen..."
+                        value={table.getColumn("name")?.getFilterValue() ?? ""}
+                        onChange={(event) =>
+                            table
+                                .getColumn("name")
+                                ?.setFilterValue(event.target.value)
+                        }
+                        className="max-w-sm"
+                    />
                 ) : (
                     <Input
                         placeholder="Filter product..."
                         value={table.getColumn("name")?.getFilterValue() ?? ""}
                         onChange={(event) =>
                             table
-                                .getColumn("email")
+                                .getColumn("name")
                                 ?.setFilterValue(event.target.value)
                         }
                         className="max-w-sm"
