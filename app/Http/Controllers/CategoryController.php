@@ -19,6 +19,7 @@ class CategoryController extends Controller
 
     function show($id)
     {
+        dd($id);
         $category = Category::find($id);
         return response()->json([
             'category' => $category

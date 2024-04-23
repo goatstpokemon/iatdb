@@ -49,7 +49,8 @@ const addProductSchema = z.object({
 const EditProducts = () => {
     const [productImg, setProductImg] = useState({});
     const [product, setProduct] = useState({});
-
+    const [categories, setCategories] = useState([]);
+    const [categoryName, setCategoryName] = useState("");
     const { id } = useParams();
     const form = useForm({
         resolver: zodResolver(addProductSchema),
@@ -118,7 +119,11 @@ const EditProducts = () => {
                 toast.error("Er is iets mis gegaan");
             });
     };
-
+    const getCategoryName = (id) => {
+        const category = categories.find((category) => category.id === id);
+        return category?.name;
+    };
+    const test = getCategoryName(product.category);
     useEffect(() => {
         apiClient
             .get(`/product/item/${id}`, {
@@ -129,17 +134,39 @@ const EditProducts = () => {
                 },
             })
             .then((response) => {
-                setProduct(response.data.product);
-                form.setValue("name", response.data.product.name);
-                form.setValue("description", response.data.product.description);
-                form.setValue("price", response.data.product.price);
-                form.setValue("category", response.data.product.category);
-                form.setValue("size", response.data.product.size);
-                form.setValue("type", response.data.product.type);
-                form.setValue("file", response.data.product.photo);
+                apiClient
+                    .get(`/categories`, {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem(
+                                "ACCESS_TOKEN"
+                            )}`,
+                        },
+                    })
+                    .then((res) => {
+                        setCategories(res.data.categories);
+                    })
+                    .then(() => {
+                        setProduct(response.data.product);
+                        form.setValue("name", response.data.product.name);
+                        form.setValue(
+                            "description",
+                            response.data.product.description
+                        );
+                        form.setValue("price", response.data.product.price);
+                        form.setValue(
+                            "category",
+                            response.data.product.category
+                        );
+                        form.setValue("size", response.data.product.size);
+                        form.setValue("type", response.data.product.type);
+                        form.setValue("file", response.data.product.photo);
+
+                        setCategoryName(test);
+                    });
             });
     }, []);
     console.log(form.formState.errors);
+
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(submitHandler)}>
@@ -378,19 +405,28 @@ const EditProducts = () => {
                                             >
                                                 <FormControl>
                                                     <SelectTrigger>
-                                                        <SelectValue placeholder="Categorieen" />
+                                                        <SelectValue
+                                                            placeholder={
+                                                                categoryName
+                                                            }
+                                                        />
                                                     </SelectTrigger>
                                                 </FormControl>
                                                 <SelectContent>
-                                                    <SelectItem value="Kleding">
-                                                        Kleding
-                                                    </SelectItem>
-                                                    <SelectItem value="Schrijfgerij">
-                                                        Schrijfgerij
-                                                    </SelectItem>
-                                                    <SelectItem value="Sport spullen">
-                                                        Sport spullen
-                                                    </SelectItem>
+                                                    {categories.map(
+                                                        (category) => (
+                                                            <SelectItem
+                                                                key={
+                                                                    category.id
+                                                                }
+                                                                value={
+                                                                    category.name
+                                                                }
+                                                            >
+                                                                {category.name}
+                                                            </SelectItem>
+                                                        )
+                                                    )}
                                                 </SelectContent>
                                             </Select>
                                             <FormMessage />

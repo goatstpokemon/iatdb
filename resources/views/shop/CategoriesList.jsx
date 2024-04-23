@@ -1,8 +1,12 @@
+import apiClient from "@/api";
 import Container from "@/components/ui/container";
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const CategoriesList = () => {
+    const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(true);
     // const categories = [
     //     {
     //         id: 1,
@@ -61,32 +65,51 @@ const CategoriesList = () => {
     //         to: "/products/categories/Tuin Spullen",
     //     },
     // ];
-    return (
-        <Container>
-            <h1 className="font-bold text-4xl my-10">Categorieen</h1>
-            <div className="grid grid-cols-4 grid-rows-10 gap-4 min-h-svh">
-                {categories.map((category) => (
-                    <Link
-                        to={category.to}
-                        key={category.id}
-                        style={{
-                            backgroundImage: `url(${category.image})`,
-                            objectFit: "cover",
-                            backgroundPosition: "center",
-                            backgroundSize: "cover",
-                            position: "relative",
-                        }}
-                        className={category.className}
-                    >
-                        <div className="absolute w-full bottom-0 left-0 bg-gradient-to-t from-gray-100 to-transparent h-20 z-10 flex items-end pb-3 rounded-b-xl ">
-                            <h2 className="text-2xl font-semibold   px-6  ">
-                                {category.name}
-                            </h2>
-                        </div>
-                    </Link>
-                ))}
-            </div>
-        </Container>
-    );
+    useEffect(() => {
+        apiClient
+            .get("/categories", {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(
+                        "ACCESS_TOKEN"
+                    )}`,
+                },
+            })
+            .then((response) => {
+                setLoading(false);
+                setCategories(response.data.categories);
+            });
+    }, []);
+    console.log({ categories });
+    if (loading) {
+        return <Container>Loading...</Container>;
+    } else {
+        return (
+            <Container>
+                <h1 className="font-bold text-4xl my-10">Categorieen</h1>
+                <div className="grid grid-cols-4 grid-rows-10 gap-4 min-h-svh">
+                    {categories.map((category) => (
+                        <Link
+                            to={"/products/categories/" + category.name}
+                            key={category.id}
+                            style={{
+                                backgroundImage: `url(${category.category_image})`,
+                                objectFit: "cover",
+                                backgroundPosition: "center",
+                                backgroundSize: "cover",
+                                position: "relative",
+                            }}
+                            className={category.className}
+                        >
+                            <div className="absolute w-full bottom-0 left-0 bg-gradient-to-t from-gray-100 to-transparent h-20 z-10 flex items-end pb-3 rounded-b-xl ">
+                                <h2 className="text-2xl font-semibold   px-6  ">
+                                    {category.name}
+                                </h2>
+                            </div>
+                        </Link>
+                    ))}
+                </div>
+            </Container>
+        );
+    }
 };
 export default CategoriesList;

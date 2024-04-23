@@ -8,7 +8,7 @@ import { Loader } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 const CategoryStore = () => {
     const { id } = useParams();
-    const [data, setData] = useState([]);
+    const [data, setData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
         setIsLoading(true);
@@ -21,8 +21,8 @@ const CategoryStore = () => {
                 },
             })
             .then((res) => {
-                setIsLoading(false);
                 setData(res.data.category);
+                setIsLoading(false);
             });
     }, []);
     console.log({ data });
