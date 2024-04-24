@@ -21,7 +21,7 @@ const AllUsers = () => {
     return (
         <div className="container mx-auto py-10">
             <h1 className="font-bold text-4xl mb-10">Gebruikers</h1>
-            <DataTable columns={userColumns} data={data} />
+            <DataTable columns={userColumns} data={data} type="user" />
         </div>
     );
 };

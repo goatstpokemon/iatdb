@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Lending;
 use App\Models\Product;
+use App\Models\User;
 use DateTime;
 use DateTimeZone;
 use Illuminate\Http\Request;
@@ -16,16 +17,16 @@ class LendingsController extends Controller
     public function store(Request $request)
     {
 
-        $userId = Auth::user()->id;
+
         $returnDate = strtotime($request->return_date);
         $lendingDate = strtotime($request->lending_date);
         $lending = new Lending;
-        $lending->borrower_id = $userId;
+        $lending->borrower_id = $request->borrower_id;
         $lending->product_id = $request->product_id;
         $lending->return_date = date('Y-m-d H:i:s', $returnDate);
         $lending->lending_date = date('Y-m-d H:i:s', $lendingDate);
         $product = Product::find($request->product_id);
-        $product->rented_by = $request->borrower_id;
+
         $product->checked = false;
         $product->save();
         $lending->save();

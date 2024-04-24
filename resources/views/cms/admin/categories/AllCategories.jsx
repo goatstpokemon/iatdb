@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 
 const AllCategories = () => {
     const [data, setData] = useState([]);
+
     const navigate = useNavigate();
     useEffect(() => {
         apiClient
@@ -21,7 +22,7 @@ const AllCategories = () => {
                 },
             })
             .then((response) => {
-                setData(response.data.catgories);
+                setData(response.data.categories);
             });
     }, []);
     return (
@@ -30,9 +31,8 @@ const AllCategories = () => {
             <DataTable
                 columns={categoriesColums}
                 data={data}
-                button={"Nieuw Categorie"}
+                type={"category"}
             />
-
             <Button className="h-10 gap-2" onClick={() => navigate("add")}>
                 <PlusCircle className="h-5 w-5" />
                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">

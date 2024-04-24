@@ -19,7 +19,7 @@ import {
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
-export function DataTable({ columns, data, button }) {
+export function DataTable({ columns, data, button, type }) {
     const [sorting, setSorting] = useState([]);
     const [columnFilters, setColumnFilters] = useState([]);
     const table = useReactTable({
@@ -39,7 +39,7 @@ export function DataTable({ columns, data, button }) {
     return (
         <div className="">
             <div className="flex items-center py-4 gap-5">
-                {columns[0].email ? (
+                {type === "user" ? (
                     <Input
                         placeholder="Filter emails..."
                         value={table.getColumn("email")?.getFilterValue() ?? ""}
@@ -50,7 +50,7 @@ export function DataTable({ columns, data, button }) {
                         }
                         className="max-w-sm"
                     />
-                ) : columns[1].name ? (
+                ) : type === "category" ? (
                     <Input
                         placeholder="Filter categorieen..."
                         value={table.getColumn("name")?.getFilterValue() ?? ""}
@@ -108,7 +108,7 @@ export function DataTable({ columns, data, button }) {
                                         <TableCell key={cell.id}>
                                             {columns[0].email ? (
                                                 <Link
-                                                    to={`/admin/users/${row.original.id}`}
+                                                    to={`/admin/users/${row.original.id}/edit`}
                                                 >
                                                     {flexRender(
                                                         cell.column.columnDef
@@ -118,7 +118,7 @@ export function DataTable({ columns, data, button }) {
                                                 </Link>
                                             ) : (
                                                 <Link
-                                                    to={`/admin/products/${row.original.id}`}
+                                                    to={`/admin/products/${row.original.id}/edit`}
                                                 >
                                                     {flexRender(
                                                         cell.column.columnDef
