@@ -35,7 +35,7 @@ const addCategorySchema = z.object({
     file: z.any(),
 });
 
-const EditProducts = () => {
+const AddCategory = () => {
     const [productImg, setProductImg] = useState({});
     const [product, setProduct] = useState({});
 
@@ -208,4 +208,4 @@ const EditProducts = () => {
         </Container>
     );
 };
-export default EditProducts;
+export default AddCategory;

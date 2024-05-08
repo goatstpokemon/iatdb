@@ -30,6 +30,7 @@ import AllProducts from "../views/cms/admin/products/AllProducts";
 import AdminEditProducts from "../views/cms/admin/products/EditProducts";
 import AllCategories from "../views/cms/admin/categories/AllCategories";
 import AddCategory from "../views/cms/admin/categories/AddCategory";
+import AdminEditCategory from "../views/cms/admin/categories/EditCategory";
 ReactDOM.createRoot(document.getElementById("app")).render(
     <AuthContextProvider>
         <NavbarContextProvider>
@@ -53,7 +54,7 @@ ReactDOM.createRoot(document.getElementById("app")).render(
                         />
                         <Route
                             path="/admin/categories/:id/edit"
-                            element={<AdminEditProducts />}
+                            element={<AdminEditCategory />}
                         />
                         <Route
                             path="/admin/categories"

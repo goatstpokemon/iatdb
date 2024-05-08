@@ -61,9 +61,9 @@ Route::controller(LendingsController::class)->middleware('auth:sanctum')->prefix
 });
 Route::controller(CategoryController::class)->middleware('auth:sanctum')->prefix('/categories')->group(function () {
     Route::get('',  'index');
-    Route::get('/:id', 'show');
+    Route::get('/category/{id}', 'show');
     Route::post('/add', 'store');
-    Route::get('/:id/edit', 'edit');
+    Route::post('/{id}/edit', 'edit');
 });
 // Private Category Routes
 

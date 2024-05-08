@@ -1,5 +1,6 @@
 import apiClient from "@/api";
 import Container from "@/components/ui/container";
+import { BentoGrid, BentoGridItem } from "@/components/ui/custom/bento";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -86,28 +87,19 @@ const CategoriesList = () => {
         return (
             <Container>
                 <h1 className="font-bold text-4xl my-10">Categorieen</h1>
-                <div className="grid grid-cols-4 grid-rows-10 gap-4 min-h-svh">
-                    {categories.map((category) => (
-                        <Link
-                            to={"/products/categories/" + category.name}
+                <BentoGrid className="max-w-4xl left-0">
+                    {categories.map((category, i) => (
+                        <BentoGridItem
                             key={category.id}
-                            style={{
-                                backgroundImage: `url(${category.category_image})`,
-                                objectFit: "cover",
-                                backgroundPosition: "center",
-                                backgroundSize: "cover",
-                                position: "relative",
-                            }}
-                            className={category.className}
-                        >
-                            <div className="absolute w-full bottom-0 left-0 bg-gradient-to-t from-gray-100 to-transparent h-20 z-10 flex items-end pb-3 rounded-b-xl ">
-                                <h2 className="text-2xl font-semibold   px-6  ">
-                                    {category.name}
-                                </h2>
-                            </div>
-                        </Link>
+                            title={category.name}
+                            link={category.name}
+                            header={category.category_image}
+                            className={
+                                i === 3 || i === 6 ? "md:col-span-2" : ""
+                            }
+                        ></BentoGridItem>
                     ))}
-                </div>
+                </BentoGrid>
             </Container>
         );
     }

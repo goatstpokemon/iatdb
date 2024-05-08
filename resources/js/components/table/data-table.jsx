@@ -38,6 +38,7 @@ export function DataTable({ columns, data, button, type }) {
 
     return (
         <div className="">
+            {console.log({ columns })}
             <div className="flex items-center py-4 gap-5">
                 {type === "user" ? (
                     <Input
@@ -106,9 +107,19 @@ export function DataTable({ columns, data, button, type }) {
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>
-                                            {columns[0].email ? (
+                                            {type === "user" ? (
                                                 <Link
                                                     to={`/admin/users/${row.original.id}/edit`}
+                                                >
+                                                    {flexRender(
+                                                        cell.column.columnDef
+                                                            .cell,
+                                                        cell.getContext()
+                                                    )}
+                                                </Link>
+                                            ) : type === "category" ? (
+                                                <Link
+                                                    to={`/admin/categories/${row.original.id}/edit`}
                                                 >
                                                     {flexRender(
                                                         cell.column.columnDef

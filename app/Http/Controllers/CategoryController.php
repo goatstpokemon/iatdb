@@ -17,14 +17,21 @@ class CategoryController extends Controller
         ], 200);
     }
 
-    function show($id)
+    function show(Request $request)
     {
-        dd($id);
-        $category = Category::find($id);
+        $categoryId = $request->route('id');
+        $category = Category::find($categoryId);
+
+        if (!$category) {
+            return response()->json([
+                'message' => 'Category not found'
+            ], 404);
+        }
         return response()->json([
             'category' => $category
         ], 200);
     }
+
     function store(Request $request)
     {
         $request->validate([
@@ -44,8 +51,32 @@ class CategoryController extends Controller
             'category' => $category
         ], 200);
     }
-    function edit($id)
+    function edit(Request $request)
     {
-        return view('category', ['id' => $id]);
+
+
+        $categoryId = $request->route('id');
+        $category = Category::find($categoryId);
+        if ($request->file('photo')) {
+            $photo = $request->file('photo');
+            $path = $photo->store('public/products');
+            $category->category_image = Storage::url($path) ?? $category->category_image;
+        } else {
+            $category->category_image = $category->category_image;
+        }
+        if (!$category) {
+            return response()->json([
+                'message' => 'Category not found'
+            ], 404);
+        }
+
+        $category->name = $request->name ?? $category->name;
+        $category->description = $request->description ?? $category->description;
+
+
+        $category->save();
+        return response()->json([
+            'category' => $category
+        ], 200);
     }
 }
