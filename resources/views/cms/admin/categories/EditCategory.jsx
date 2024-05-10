@@ -96,7 +96,7 @@ const AdminEditCategory = () => {
         form.append("name", data.name);
         form.append("description", data.description);
         apiClient
-            .post(`/categories/${id}/edit`, form, {
+            .post(`/user/${id}/edit`, form, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem(
                         "ACCESS_TOKEN"

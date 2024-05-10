@@ -32,7 +32,7 @@ class UserController extends Controller
         }
         $user->username = $request->username ?? $user->username;
         $user->save();
-        return redirect('/');
+        return response()->json(['user' => $user, 'message' => 'User updated successfully', 200]);
     }
 
     public function editProfile(Request $request)
