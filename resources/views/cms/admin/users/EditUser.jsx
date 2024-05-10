@@ -18,10 +18,10 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 const userFormSchema = z.object({
-    name: z.string().nonempty("Name is required"),
-    email: z.string().email("Invalid email").nonempty("Email is required"),
-    dob: z.string().nonempty("Date of birth is required"),
-    role: z.string().nonempty("Role is required"),
+    name: z.string(),
+    email: z.string().email("Invalid email"),
+    dob: z.string(),
+    role: z.string(),
     banned: z.boolean(),
     varified: z.boolean(),
 });
@@ -43,6 +43,12 @@ const EditUser = () => {
                 const user = response.data;
                 setUser(user);
                 setLoading(false);
+                form.setValue("name", user.name);
+                form.setValue("email", user.email);
+                form.setValue("role", user.role);
+                form.setValue("dob", user.dob);
+                form.setValue("banned", user.banned);
+                form.setValue("varified", user.varified);
             })
             .catch((error) => {
                 toast.error(error);
@@ -53,12 +59,12 @@ const EditUser = () => {
         resolver: zodResolver(userFormSchema),
         mode: "onChange",
         defaultValues: {
-            name: user.name,
-            email: user.email,
-            dob: user.dob,
-            role: user.role,
-            banned: user.banned,
-            varified: user.varified,
+            name: "",
+            email: "",
+            dob: "",
+            role: "",
+            banned: "",
+            varified: "",
         },
     });
     const submitHandler = (data) => {
