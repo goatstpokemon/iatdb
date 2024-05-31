@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -96,7 +95,7 @@ const AdminEditCategory = () => {
         form.append("name", data.name);
         form.append("description", data.description);
         apiClient
-            .post(`/user/${id}/edit`, form, {
+            .post(`/categories/${id}/edit`, form, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem(
                         "ACCESS_TOKEN"

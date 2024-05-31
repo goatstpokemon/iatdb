@@ -352,8 +352,8 @@ const AddProduct = () => {
                                                     <SelectItem value="Schrijfgerij">
                                                         Schrijfgerij
                                                     </SelectItem>
-                                                    <SelectItem value="Sport spullen">
-                                                        Sport spullen
+                                                    <SelectItem value="Sport Spullen">
+                                                        Sport Spullen
                                                     </SelectItem>
                                                 </SelectContent>
                                             </Select>

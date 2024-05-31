@@ -61,6 +61,7 @@ class ProductController extends Controller
             'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
         $category = Category::where('name', $request->category)->first();
+        // dd($request->category);
         $product = new Product;
         $product->user_id = Auth::user()->id;
         $product->name = $request->name;

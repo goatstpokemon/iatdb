@@ -20,6 +20,7 @@ class UserController extends Controller
         $user = User::find($id);
         $user->name = $request->name ?? $user->name;
         $user->email = $request->email;
+        
         if ($request->file('photo')) {
             $request->validate([
                 'photo' => 'required|image|mimes:jpeg,png,jpg,gif',
