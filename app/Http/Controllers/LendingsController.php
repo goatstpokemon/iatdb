@@ -26,7 +26,6 @@ class LendingsController extends Controller
         $lending->return_date = date('Y-m-d H:i:s', $returnDate);
         $lending->lending_date = date('Y-m-d H:i:s', $lendingDate);
         $product = Product::find($request->product_id);
-
         $product->checked = false;
         $product->save();
         $lending->save();
@@ -44,7 +43,9 @@ class LendingsController extends Controller
             ->first();
 
         if (!$lending) {
-            return redirect()->back()->withErrors(['Je hebt dit product niet geleend']);
+            return response()->response([
+                'message' => 'Product is niet uitgeleend'
+            ], 404);
         }
 
         $lending->returned = true;
@@ -52,6 +53,53 @@ class LendingsController extends Controller
 
         return response()->response([
             'message' => 'Product is geretourneerd'
+        ], 200);
+    }
+
+    public function getYourLendings()
+    {
+        $userId = auth()->user()->id;
+        $lendings = Lending::where('borrower_id', $userId)->get();
+        return response()->json([
+            'lendings' => $lendings
+        ], 200);
+    }
+    public function currentlyLentOut()
+    {
+        $userId = auth()->user()->id;
+        $lentOut = Lending::where('returned', false)
+            ->where('user_id', $userId)
+            ->get();
+        return response()->json([
+            'lentOut' => $lentOut
+        ], 200);
+    }
+
+    public function getLending($id)
+    {
+        $lending = Lending::find($id);
+        return response()->json([
+            'lending' => $lending
+        ], 200);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $lending = Lending::find($id);
+        $lending->return_date = $request->return_date;
+        $lending->lending_date = $request->lending_date;
+        $lending->save();
+        return response()->json([
+            'lending' => $lending
+        ], 200);
+    }
+
+    public function destroy($id)
+    {
+        $lending = Lending::find($id);
+        $lending->delete();
+        return response()->json([
+            'message' => 'Lening verwijderd'
         ], 200);
     }
 }

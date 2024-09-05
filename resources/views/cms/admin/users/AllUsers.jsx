@@ -18,6 +18,8 @@ const AllUsers = () => {
                 setData(response.data.users);
             });
     }, []);
+    console.log({ data });
+
     return (
         <div className="container mx-auto py-10">
             <h1 className="font-bold text-4xl mb-10">Gebruikers</h1>

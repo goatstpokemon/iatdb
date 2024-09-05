@@ -43,8 +43,8 @@ Route::middleware('auth:sanctum')->prefix('user')->group(function () {
 Route::controller(ProductController::class)->middleware('auth:sanctum')->prefix('/product')->group(function () {
     Route::get('',  'index');
     Route::get('/yours', 'yours');
-    Route::get('/category/{category}', 'categoryItems'); // Change the route URL to include '/category'
-    Route::get('/item/{id}', 'show'); // Change the route URL to include '/item'
+    Route::get('/category/{category}', 'categoryItems');
+    Route::get('/item/{id}', 'show');
     Route::post('/create', 'store');
     Route::post('/item/{id}/update', 'update');
     Route::delete('/item/{id}/delete',  'destroy');
@@ -54,17 +54,17 @@ Route::controller(ProductController::class)->middleware('auth:sanctum')->prefix(
 Route::controller(LendingsController::class)->middleware('auth:sanctum')->prefix('/lending')->group(function () {
     Route::get('',  'index');
     Route::get('/yours', 'yours');
-    Route::get('/category/{category}', 'categoryItems'); // Change the route URL to include '/category'
-    Route::get('/item/{id}', 'show'); // Change the route URL to include '/item'
+    Route::get('/{id}', 'show');
     Route::post('/create', 'store');
-    Route::post('/item/{id}/update', 'update');
-    Route::delete('/item/{id}/delete',  'destroy');
+    Route::post('/{id}/update', 'update');
+    Route::delete('/{id}/delete',  'destroy');
 });
 Route::controller(CategoryController::class)->middleware('auth:sanctum')->prefix('/categories')->group(function () {
     Route::get('',  'index');
     Route::get('/category/{id}', 'show');
     Route::post('/add', 'store');
     Route::post('/{id}/edit', 'edit');
+    Route::post('/{id}/delete', 'destroy');
 });
 // Private Category Routes
 

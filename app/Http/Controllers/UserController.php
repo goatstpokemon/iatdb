@@ -19,8 +19,7 @@ class UserController extends Controller
         $id = $request->route('id');
         $user = User::find($id);
         $user->name = $request->name ?? $user->name;
-        $user->email = $request->email;
-        
+        $user->email = $request->email ?? $user->email;
         if ($request->file('photo')) {
             $request->validate([
                 'photo' => 'required|image|mimes:jpeg,png,jpg,gif',
@@ -32,8 +31,10 @@ class UserController extends Controller
             $user->profile_image = $user->profile_image;
         }
         $user->username = $request->username ?? $user->username;
+        $user->hasWarning = $request->hasWarning ?? $user->hasWarning;
+        $user->isBanned = $request->isBanned ?? $user->isBanned;
         $user->save();
-        return response()->json(['user' => $user, 'message' => 'User updated successfully', 200]);
+        return response()->json(['user' => $user, 'req' => $request, 'message' => 'User updated successfully', 200]);
     }
 
     public function editProfile(Request $request)

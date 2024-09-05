@@ -33,39 +33,28 @@ export function DataTable({ columns, data, button, type }) {
         getFilteredRowModel: getFilteredRowModel(),
         state: {
             sorting,
+            columnFilters,
         },
     });
 
     return (
         <div className="">
-            {console.log({ columns })}
             <div className="flex items-center py-4 gap-5">
                 {type === "user" ? (
                     <Input
-                        placeholder="Filter emails..."
-                        value={table.getColumn("email")?.getFilterValue() ?? ""}
+                        placeholder="Filter op emails..."
+                        value={table.getColumn("email")?.getFilterValue()}
                         onChange={(event) =>
                             table
                                 .getColumn("email")
-                                ?.setFilterValue(event.target.value)
-                        }
-                        className="max-w-sm"
-                    />
-                ) : type === "category" ? (
-                    <Input
-                        placeholder="Filter categorieen..."
-                        value={table.getColumn("name")?.getFilterValue() ?? ""}
-                        onChange={(event) =>
-                            table
-                                .getColumn("name")
-                                ?.setFilterValue(event.target.value)
+                                .setFilterValue(event.target.value)
                         }
                         className="max-w-sm"
                     />
                 ) : (
                     <Input
-                        placeholder="Filter product..."
-                        value={table.getColumn("name")?.getFilterValue() ?? ""}
+                        placeholder="Filter op naam..."
+                        value={table.getColumn("name").getFilterValue()}
                         onChange={(event) =>
                             table
                                 .getColumn("name")

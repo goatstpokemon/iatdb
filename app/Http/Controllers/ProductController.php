@@ -106,6 +106,7 @@ class ProductController extends Controller
 
         $productId = $request->route('id');
         $product = Product::find($productId);
+        $categoryId = Category::where('name', $request->category)->first();
         if ($request->file('photo')) {
             $photo = $request->file('photo');
             $path = $photo->store('public/products');
@@ -115,7 +116,7 @@ class ProductController extends Controller
         }
         $product->rentable = $request->rentable ?? $product->rentable;
         $product->price = $request->price ?? $product->price;
-        $product->category = $request->category ?? $product->category;
+        $product->category = $categoryId->id ?? $product->category;
         $product->type = $request->type ?? $product->type;
         $product->size = $request->size ?? $product->size;
         $product->name = $request->name ?? $product->name;
@@ -133,21 +134,6 @@ class ProductController extends Controller
         }
     }
 
-    public function edit(Request $request)
-    {
-        $productId = $request->route('id');
-        $product = Product::find($productId);
-
-        $owner = User::find($product->user_id);
-        $rentee = User::find($product->rented_by);
-        $currentUser = Auth::user();
-        return view('pages.products.edit', [
-            'product' => $product,
-            'owner' => $owner,
-            'rentee' => $rentee,
-            'currentUser' => $currentUser
-        ]);
-    }
     public function categoryItems(Request $request)
     {
 
@@ -220,12 +206,13 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy(Request $request)
     {
+        $productId = $request->route('id');
+        $product = Product::find($productId);
         $product->delete();
-        $deleted = true;
         return response()->json([
-            'deleted' => $deleted
+            'deleted' => true
         ], 200);
     }
 }

@@ -38,8 +38,9 @@ const userFormSchema = z.object({
     name: z.string(),
     username: z.string(),
     email: z.string().email("Invalid email"),
-    role: z.string(),
-    banned: z.boolean(),
+    role: z.coerce.number(),
+    banned: z.coerce.number(),
+    warning: z.coerce.number(),
 });
 
 const EditUser = () => {
@@ -56,7 +57,8 @@ const EditUser = () => {
             username: "",
             email: "",
             role: "",
-            banned: "",
+            banned: false,
+            warning: false,
         },
     });
     useEffect(() => {
@@ -78,6 +80,7 @@ const EditUser = () => {
                 form.setValue("email", user.email);
                 form.setValue("role", user.isAdmin);
                 form.setValue("banned", user.isBanned);
+                form.setValue("warning", user.hasWarning);
                 setLoading(false);
             })
             .catch((error) => {
@@ -90,11 +93,13 @@ const EditUser = () => {
         form.append("name", data.name);
         form.append("username", data.username);
         form.append("email", data.email);
-        form.append("role", data.role);
-        form.append("banned", data.banned);
+        form.append("role", Number(data.role));
+        form.append("isBanned", Number(data.banned));
+        form.append("hasWarning", Number(data.warning));
+        console.log(form);
 
         apiClient
-            .put(`/user/${id}`, data, {
+            .post(`/user/${id}/edit`, form, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem(
                         "ACCESS_TOKEN"
@@ -108,8 +113,8 @@ const EditUser = () => {
                 toast.error(error);
             });
     };
-    console.log(user);
-    console.log({ user });
+    console.log(form.formState.errors);
+    console.log(form.getValues());
     if (loading) {
         return <div>Loading...</div>;
     } else {
@@ -210,6 +215,47 @@ const EditUser = () => {
                                 <div>
                                     <FormField
                                         control={form.control}
+                                        name="warning"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>
+                                                    Waarschuwing
+                                                </FormLabel>
+                                                <FormControl>
+                                                    <Select
+                                                        onValueChange={
+                                                            field.onChange
+                                                        }
+                                                        defaultValue={
+                                                            field.value
+                                                        }
+                                                    >
+                                                        <FormControl>
+                                                            <SelectTrigger>
+                                                                <SelectValue placeholder="Heeft waarschuwing" />
+                                                            </SelectTrigger>
+                                                        </FormControl>
+                                                        <SelectContent>
+                                                            <SelectItem
+                                                                value={1}
+                                                            >
+                                                                Ja
+                                                            </SelectItem>
+                                                            <SelectItem
+                                                                value={0}
+                                                            >
+                                                                Nee
+                                                            </SelectItem>
+                                                        </SelectContent>
+                                                    </Select>
+                                                </FormControl>
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                                <div>
+                                    <FormField
+                                        control={form.control}
                                         name="banned"
                                         render={({ field }) => (
                                             <FormItem>
@@ -219,9 +265,9 @@ const EditUser = () => {
                                                         onValueChange={
                                                             field.onChange
                                                         }
-                                                        defaultValue={
+                                                        defaultValue={Number(
                                                             field.value
-                                                        }
+                                                        )}
                                                     >
                                                         <FormControl>
                                                             <SelectTrigger>

@@ -32,15 +32,7 @@ const YourProducts = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
-    // const products = [
-    //     {
-    //         id: 1,
-    //         name: "Laser Lemonade Machine",
-    //         status: "draft",
-    //         image: "https://source.unsplash.com/64x64/?product",
-    //         price: "$499.99",
-    //     },
-    // ];
+
     useEffect(() => {
         apiClient
             .get("/product/yours", {
