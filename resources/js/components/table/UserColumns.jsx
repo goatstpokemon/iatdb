@@ -9,6 +9,8 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { toast } from "sonner";
+import apiClient from "@/api";
 export const userColumns = [
     {
         accessorKey: "id",
@@ -93,16 +95,19 @@ export const userColumns = [
         enableHiding: false,
         cell: ({ row }) => {
             const navigate = useNavigate();
-            const deleteUser = async () => {
+            const deleteUser = (id) => {
                 try {
-                    await apiClient.delete(`/user/${row.original.id}`, {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem(
-                                "ACCESS_TOKEN"
-                            )}`,
-                        },
-                    });
-                    mutate();
+                    apiClient
+                        .delete(`/user/${id}/delete`, {
+                            headers: {
+                                Authorization: `Bearer ${localStorage.getItem(
+                                    "ACCESS_TOKEN"
+                                )}`,
+                            },
+                        })
+                        .then(() => {
+                            toast.success("Gebruiker verwijderd");
+                        });
                 } catch (error) {
                     console.error(error);
                 }
@@ -118,7 +123,9 @@ export const userColumns = [
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => deleteUser()}>
+                        <DropdownMenuItem
+                            onClick={() => deleteUser(row.original.id)}
+                        >
                             Verwijder gebruiker
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />

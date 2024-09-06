@@ -35,9 +35,7 @@ const accountFormSchema = z.object({
             message: "Maar niet langer dan 30 karakters.",
         }),
     email: z.string().email(),
-    dob: z.date({
-        required_error: "Je moet een geboortedatum invullen.",
-    }),
+
     oldPassword: z
         .string({ message: "Je oude wachtwoord is verplicht." })
         .optional(),
@@ -74,14 +72,12 @@ export const AccountPage = () => {
                 setProfile(response.data.user);
                 form.setValue("name", response.data.user.name);
                 form.setValue("email", response.data.user.email);
-                form.setValue("dob", response.data.user.dob);
             });
     }, []);
     const onSubmit = (data) => {
         const form = new FormData();
         form.append("name", data.name);
         form.append("email", data.email);
-        form.append("dob", data.dob);
 
         apiClient
             .post("/user/profile/update", form, {
@@ -93,21 +89,8 @@ export const AccountPage = () => {
                 },
             })
             .then(() => {
-                toast({
-                    title: "Profiel bijgewerkt",
-                    description: "Je profiel is succesvol bijgewerkt",
-                });
+                toast.success("Je account is bijgewerkt");
             });
-        toast({
-            title: "Je hebt het volgende ingevuld:",
-            description: (
-                <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                    <code className="text-white">
-                        {JSON.stringify(data, null, 2)}
-                    </code>
-                </pre>
-            ),
-        });
     };
 
     return (
@@ -146,59 +129,7 @@ export const AccountPage = () => {
                         </FormItem>
                     )}
                 />
-                <FormField
-                    control={form.control}
-                    name="dob"
-                    render={({ field }) => (
-                        <FormItem className="flex flex-col">
-                            <FormLabel>Geboorte datum</FormLabel>
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                    <FormControl>
-                                        <Button
-                                            variant={"outline"}
-                                            className={cn(
-                                                "w-[240px] pl-3 text-left font-normal",
-                                                !field.value &&
-                                                    "text-muted-foreground"
-                                            )}
-                                        >
-                                            {field.value ? (
-                                                format(field.value, "PPP")
-                                            ) : (
-                                                <span>Selecteer een datum</span>
-                                            )}
-                                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                        </Button>
-                                    </FormControl>
-                                </PopoverTrigger>
-                                <PopoverContent
-                                    className="w-auto p-0"
-                                    align="start"
-                                >
-                                    <Calendar
-                                        mode="single"
-                                        captionLayout="dropdown-buttons"
-                                        selected={field.value}
-                                        onSelect={field.onChange}
-                                        fromYear={1900}
-                                        defaultMonth={profile.dob}
-                                        toYear={new Date().getFullYear()}
-                                        disabled={(date) =>
-                                            date > new Date() ||
-                                            date < new Date("1900-01-01")
-                                        }
-                                        initialFocus
-                                    />
-                                </PopoverContent>
-                            </Popover>
-                            <FormDescription>
-                                We willen weten hoe oud je bent
-                            </FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+
                 <h1 className="font-bold text-4xl">Wachtwoord Aanpassen</h1>
                 <FormField
                     control={form.control}

@@ -18,10 +18,7 @@ const Home = () => {
                                 Overzicht
                             </TabsTrigger>
                             <TabsTrigger value="lending">Uitlening</TabsTrigger>
-                            <TabsTrigger value="borrowing">Lenen</TabsTrigger>
-                            <TabsTrigger value="notifications">
-                                Aanvragen
-                            </TabsTrigger>
+                            <TabsTrigger value="returns">Retouren</TabsTrigger>
                         </TabsList>
                         <h2 className="text-3xl font-bold tracking-tight">
                             Hello {user?.name}
@@ -29,11 +26,8 @@ const Home = () => {
                         <TabsContent value="overview" className="space-y-4">
                             <Overview />
                         </TabsContent>
-                        <TabsContent value="lending" className="space-y-4">
+                        <TabsContent value="returns" className="space-y-4">
                             <Lending />
-                        </TabsContent>
-                        <TabsContent value="borrowing" className="space-y-4">
-                            <Borrowing />
                         </TabsContent>
                         <TabsContent
                             value="notifications"

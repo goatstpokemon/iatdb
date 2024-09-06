@@ -15,15 +15,18 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('borrower_id');
             $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('owner_id');
+
             $table->foreign('borrower_id')->references('id')->on('users')
                 ->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')
                 ->onDelete('cascade');
+            $table->foreign('owner_id')->references('id')->on('users')->onDelete('cascade');
             $table->boolean('returned')->default(false);
             $table->date('returned_at')->nullable();
             $table->date('return_date');
             $table->date('lending_date');
-            $table->boolean('accepeted')->default(false);
+            $table->boolean('accepted')->default(false);
             $table->timestamps();
         });
     }

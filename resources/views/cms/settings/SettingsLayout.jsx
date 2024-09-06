@@ -2,6 +2,7 @@ import { Separator } from "@/components/ui/separator";
 import SidebarNav from "./SidebarNav";
 import { Outlet, useLocation } from "react-router-dom";
 import Header from "../../../js/components/Header";
+import { Toaster } from "@/components/ui/sonner";
 
 const SettingsLayout = () => {
     const location = useLocation();
@@ -37,6 +38,7 @@ const SettingsLayout = () => {
 
     return (
         <div className="min-h-svh">
+            <Toaster />
             <Header />
             <div className="space-y-6 p-10 pb-16">
                 <div className="space-y-0.5">

@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Lending extends Model
 {
     use HasFactory;
+
+    public function borrower()
+    {
+        return $this->belongsTo(User::class, 'borrower_id');
+    }
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
 }

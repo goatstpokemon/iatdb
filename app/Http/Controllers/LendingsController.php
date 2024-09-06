@@ -16,8 +16,6 @@ class LendingsController extends Controller
 
     public function store(Request $request)
     {
-
-
         $returnDate = strtotime($request->return_date);
         $lendingDate = strtotime($request->lending_date);
         $lending = new Lending;
@@ -74,7 +72,19 @@ class LendingsController extends Controller
             'lentOut' => $lentOut
         ], 200);
     }
+    public function lendingRequests()
+    {
+        $userId = auth()->user()->id;
+        $productOwned = Product::where('user_id', $userId)->pluck('id');
 
+        $lendingRequests = Lending::where('accepted', false)
+            ->whereIn('product_id', $productOwned)
+            ->get();
+        $lendingRequests->load('borrower', 'product');
+        return response()->json([
+            'lendingRequests' => $lendingRequests
+        ], 200);
+    }
     public function getLending($id)
     {
         $lending = Lending::find($id);
@@ -82,21 +92,28 @@ class LendingsController extends Controller
             'lending' => $lending
         ], 200);
     }
-
-    public function update(Request $request, $id)
+    public function acceptLendingRequest(Request $request)
     {
-        $lending = Lending::find($id);
-        $lending->return_date = $request->return_date;
-        $lending->lending_date = $request->lending_date;
+
+
+        $lending = Lending::find($request->id);
+
+        $lending->accepted = true;
         $lending->save();
         return response()->json([
             'lending' => $lending
         ], 200);
     }
 
-    public function destroy($id)
+    public function test(Request $request)
     {
-        $lending = Lending::find($id);
+        dd($request->id);
+    }
+
+    public function destroy(Request $request)
+    {
+        $lendingId = $request->id;
+        $lending = Lending::find($lendingId);
         $lending->delete();
         return response()->json([
             'message' => 'Lening verwijderd'

@@ -83,4 +83,13 @@ class UserController extends Controller
 
         return response()->json(['user' => $user, 'products' => $products]);
     }
+
+
+    public function destroy(Request $request)
+    {
+        $id = $request->id;
+        $user = User::find($id);
+        $user->delete();
+        return response()->json(['message' => 'User deleted successfully']);
+    }
 }

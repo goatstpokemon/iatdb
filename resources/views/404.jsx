@@ -1,8 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const NotFound = () => {
-    const navigate = useNavigate();
     return (
         <div className="container mt-auto flex h-svh min-h-full flex-1 flex-col items-center justify-center gap-4">
             <h1 className="text-8xl font-bold tracking-tight text-muted-foreground">
@@ -11,7 +10,7 @@ const NotFound = () => {
             <p className="text-xg font-semibold">Page not found</p>
             <div className="mt-8 flex gap-2">
                 <Button asChild>
-                    <Link to="/">Go home</Link>
+                    <Link to="/">Ga terug</Link>
                 </Button>
             </div>
         </div>

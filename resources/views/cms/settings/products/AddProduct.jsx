@@ -27,6 +27,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useState } from "react";
 import apiClient from "@/api";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 const addProductSchema = z.object({
     name: z
@@ -47,7 +48,7 @@ const addProductSchema = z.object({
 
 const AddProduct = () => {
     const [productImg, setProductImg] = useState({});
-
+    const navigate = useNavigate();
     const form = useForm({
         resolver: zodResolver(addProductSchema),
         mode: "onChange",
@@ -97,8 +98,9 @@ const AddProduct = () => {
                     "Content-Type": "multipart/form-data",
                 },
             })
-            .then((response) => {
+            .then(() => {
                 toast.success("Product toegevoegd");
+                navigate("/profile/products");
             })
             .catch((error) => {
                 toast.error("Er is iets mis gegaan");

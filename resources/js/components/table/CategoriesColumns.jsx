@@ -9,6 +9,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { toast } from "sonner";
 export const categoriesColums = [
     {
         accessorKey: "id",
@@ -49,16 +50,18 @@ export const categoriesColums = [
             const navigate = useNavigate();
             const deleteCategory = async () => {
                 try {
-                    await apiClient.delete(
-                        `category/${row.original.id}/delete`,
-                        {
+                    await apiClient
+                        .delete(`categories/${row.original.id}/delete`, {
                             headers: {
                                 Authorization: `Bearer ${localStorage.getItem(
                                     "ACCESS_TOKEN"
                                 )}`,
                             },
-                        }
-                    );
+                        })
+                        .then(() => {
+                            toast.success("Categorie verwijderd");
+                            navigate("/admin/categories");
+                        });
                 } catch (error) {
                     console.error(error);
                 }

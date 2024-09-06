@@ -83,18 +83,20 @@ export const productColums = [
         enableHiding: false,
         cell: ({ row }) => {
             const navigate = useNavigate();
-            const deleteProduct = async () => {
+            const deleteProduct = () => {
                 try {
-                    await apiClient.delete(
-                        `/product/item/${row.original.id}/delete`,
-                        {
+                    apiClient
+                        .delete(`/product/item/${row.original.id}/delete`, {
                             headers: {
                                 Authorization: `Bearer ${localStorage.getItem(
                                     "ACCESS_TOKEN"
                                 )}`,
                             },
-                        }
-                    );
+                        })
+                        .then(() => {
+                            toast.success("Product verwijderd");
+                            navigate("/admin/products");
+                        });
                 } catch (error) {
                     console.error(error);
                 }
@@ -116,7 +118,7 @@ export const productColums = [
                         <DropdownMenuItem
                             onClick={() =>
                                 navigate(
-                                    `/admin/product/${row.original.id}/edit`
+                                    `/admin/products/${row.original.id}/edit`
                                 )
                             }
                         >

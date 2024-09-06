@@ -26,16 +26,16 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/signup', [AuthController::class, 'signup']);
 
 // Private User Routes
-Route::middleware('auth:sanctum')->prefix('user')->group(function () {
+Route::middleware('auth:sanctum')->prefix('/user')->group(function () {
     Route::get('', [UserController::class, 'index']);
     Route::put('/update', [UserController::class, 'update']);
-    Route::delete('{id}/delete', [UserController::class, 'destroy']);
     Route::get('/logout', [AuthController::class, 'logout']);
     Route::get('/profile', [UserController::class, 'profile']);
     Route::post('/profile/update', [UserController::class, 'editProfile']);
     Route::get('/{id}', [UserController::class, 'show']);
     Route::post('/{id}/edit', [UserController::class, 'editUser']);
-    Route::get('profile/{id}', [UserController::class, 'userProfile']);
+    Route::get('/profile/{id}', [UserController::class, 'userProfile']);
+    Route::delete('/{id}/delete', [UserController::class, 'destroy']);
 });
 
 // Private Product Routes
@@ -52,11 +52,17 @@ Route::controller(ProductController::class)->middleware('auth:sanctum')->prefix(
 
 // Private Lending Routes
 Route::controller(LendingsController::class)->middleware('auth:sanctum')->prefix('/lending')->group(function () {
+    Route::get('/{id}/accept', 'acceptLendingRequest');
+    Route::get('/{id}/reject', 'destroy');
     Route::get('',  'index');
+    Route::get('/borrowed', 'borrowed');
+    Route::get('/lent', 'lent');
+    Route::get('/return/{id}', 'returnProduct');
     Route::get('/yours', 'yours');
-    Route::get('/{id}', 'show');
+    // Route::get('/{id}', 'show');
     Route::post('/create', 'store');
     Route::post('/{id}/update', 'update');
+    Route::get('/requests', 'lendingRequests');
     Route::delete('/{id}/delete',  'destroy');
 });
 Route::controller(CategoryController::class)->middleware('auth:sanctum')->prefix('/categories')->group(function () {

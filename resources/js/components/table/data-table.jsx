@@ -96,36 +96,9 @@ export function DataTable({ columns, data, button, type }) {
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>
-                                            {type === "user" ? (
-                                                <Link
-                                                    to={`/admin/users/${row.original.id}/edit`}
-                                                >
-                                                    {flexRender(
-                                                        cell.column.columnDef
-                                                            .cell,
-                                                        cell.getContext()
-                                                    )}
-                                                </Link>
-                                            ) : type === "category" ? (
-                                                <Link
-                                                    to={`/admin/categories/${row.original.id}/edit`}
-                                                >
-                                                    {flexRender(
-                                                        cell.column.columnDef
-                                                            .cell,
-                                                        cell.getContext()
-                                                    )}
-                                                </Link>
-                                            ) : (
-                                                <Link
-                                                    to={`/admin/products/${row.original.id}/edit`}
-                                                >
-                                                    {flexRender(
-                                                        cell.column.columnDef
-                                                            .cell,
-                                                        cell.getContext()
-                                                    )}
-                                                </Link>
+                                            {flexRender(
+                                                cell.column.columnDef.cell,
+                                                cell.getContext()
                                             )}
                                         </TableCell>
                                     ))}

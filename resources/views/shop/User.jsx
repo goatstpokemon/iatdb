@@ -27,33 +27,6 @@ const User = () => {
             });
     }, []);
     console.log({ products, user });
-    // const user = {
-    //     id: 1,
-    //     name: "John Doe",
-    //     email: "john@doe.com",
-    //     profile_picture: "https://randomuser.me/api/portraits/men/75.jpg",
-    //     bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat, molestie ipsum et, consequat nibh. Etiam non.",
-    //     address: {
-    //         street: "Hoofdstraat 123",
-    //         city: "Amsterdam",
-    //         state: "NH",
-    //         zip: "1234 AB",
-    //     },
-    //     reviews: [
-    //         {
-    //             id: 1,
-    //             rating: 5,
-    //             comment: "Great user!",
-    //             type: "lending",
-    //         },
-    //         {
-    //             id: 2,
-    //             rating: 3,
-    //             comment: "Good user!",
-    //             type: "borrowing",
-    //         },
-    //     ],
-    // };
 
     if (loading) {
         return <p>Loading...</p>;
