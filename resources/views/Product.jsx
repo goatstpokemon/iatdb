@@ -7,11 +7,11 @@ import {
     BreadcrumbList,
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import Container from "@/components/ui/container";
 import { toast } from "sonner";
-import { Loader, Shield, Slash, Star } from "lucide-react";
+import { Loader, Shield, Star } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
@@ -21,12 +21,7 @@ const Product = () => {
     const [range, setRange] = useState([]);
     const [data, setData] = useState([]);
     const user = JSON.parse(localStorage.getItem("user"));
-    const [borrowingData, setBorrowingData] = useState({
-        lending_date: new Date().toISOString(),
-        return_date: new Date().toISOString(),
-        borrower_id: user.id,
-        product_id: id,
-    });
+    const [borrowingData, setBorrowingData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const product = {
         reviews: [
@@ -63,7 +58,8 @@ const Product = () => {
         setBorrowingData({
             lending_date: new Date(range.from),
             return_date: new Date(range.to),
-            ...borrowingData,
+            product_id: data.product.id,
+            borrower_id: user.id,
         });
         apiClient
             .post(`/lending/create`, borrowingData, {
@@ -74,7 +70,7 @@ const Product = () => {
                 },
             })
             .then((res) => {
-                toast("Lening aangevraagd" + " " + res.data.message, "success");
+                toast.success("Lening aangevraagd");
             });
     };
     console.log({ borrowingData });

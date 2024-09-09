@@ -56,7 +56,7 @@ Route::controller(LendingsController::class)->middleware('auth:sanctum')->prefix
     Route::get('/{id}/reject', 'destroy');
     Route::get('',  'index');
     Route::get('/borrowed', 'borrowed');
-    Route::get('/lent', 'lent');
+    Route::get('/lent', 'currentlyLentOut');
     Route::get('/return/{id}', 'returnProduct');
     Route::get('/yours', 'yours');
     // Route::get('/{id}', 'show');

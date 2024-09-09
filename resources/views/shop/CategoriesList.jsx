@@ -1,9 +1,9 @@
 import apiClient from "@/api";
 import Container from "@/components/ui/container";
 import { BentoGrid, BentoGridItem } from "@/components/ui/custom/bento";
-import { cn } from "@/lib/utils";
+
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+
 
 const CategoriesList = () => {
     const [categories, setCategories] = useState([]);

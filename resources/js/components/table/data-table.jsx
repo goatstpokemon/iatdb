@@ -16,7 +16,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { Link } from "react-router-dom";
+
 import { useState } from "react";
 
 export function DataTable({ columns, data, button, type }) {

@@ -1,10 +1,8 @@
 import ProductList from "@/components/ProductList";
-import { CategoriesName } from "./tempdata";
-import Container from "@/components/ui/container";
+
 import { useEffect, useState } from "react";
 import apiClient from "@/api";
 import { useParams } from "react-router-dom";
-import { Loader } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 const CategoryStore = () => {
     const { id } = useParams();
@@ -35,7 +33,7 @@ const CategoryStore = () => {
                             <div className="rounded-xl pb-5">
                                 <img
                                     className="rounded-xl h-[30rem] object-cover"
-                                    src={CategoriesName[0].image}
+                                    src={data.image}
                                     alt={id}
                                 />
                             </div>

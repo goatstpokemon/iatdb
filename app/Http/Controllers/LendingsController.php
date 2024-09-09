@@ -16,17 +16,22 @@ class LendingsController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'borrower_id' => 'required',
+            'product_id' => 'required',
+            'return_date' => 'required',
+            'lending_date' => 'required'
+        ]);
         $returnDate = strtotime($request->return_date);
         $lendingDate = strtotime($request->lending_date);
         $lending = new Lending;
         $lending->borrower_id = $request->borrower_id;
         $lending->product_id = $request->product_id;
-        $lending->return_date = date('Y-m-d H:i:s', $returnDate);
-        $lending->lending_date = date('Y-m-d H:i:s', $lendingDate);
-        $product = Product::find($request->product_id);
-        $product->checked = false;
-        $product->save();
+        $lending->return_date = date('Y-m-d ', $returnDate);
+        $lending->lending_date = date('Y-m-d', $lendingDate);
+        $lending->checked = false;
         $lending->save();
+
         return response()->json([
             'lending' => $lending
         ], 200);
@@ -65,9 +70,11 @@ class LendingsController extends Controller
     public function currentlyLentOut()
     {
         $userId = auth()->user()->id;
+        $productOwned = Product::where('user_id', $userId)->pluck('id');
         $lentOut = Lending::where('returned', false)
-            ->where('user_id', $userId)
+            ->whereIn('product_id', $productOwned)->where('accepted', true)
             ->get();
+        $lentOut->load('product');
         return response()->json([
             'lentOut' => $lentOut
         ], 200);

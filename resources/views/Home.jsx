@@ -17,11 +17,13 @@ const Home = () => {
                             <TabsTrigger value="overview">
                                 Overzicht
                             </TabsTrigger>
-                            <TabsTrigger value="lending">Uitlening</TabsTrigger>
-                            <TabsTrigger value="returns">Retouren</TabsTrigger>
+                            <TabsTrigger value="lending">Retouren</TabsTrigger>
+                            <TabsTrigger value="returns">
+                                Uit geleend
+                            </TabsTrigger>
                         </TabsList>
                         <h2 className="text-3xl font-bold tracking-tight">
-                            Hello {user?.name}
+                            Hallo {user?.name}
                         </h2>
                         <TabsContent value="overview" className="space-y-4">
                             <Overview />

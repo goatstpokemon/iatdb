@@ -26,6 +26,7 @@ return new class extends Migration
             $table->date('returned_at')->nullable();
             $table->date('return_date');
             $table->date('lending_date');
+            $table->boolean('checked')->default(false);
             $table->boolean('accepted')->default(false);
             $table->timestamps();
         });
