@@ -48,6 +48,11 @@ const Berichten = ({ requests, setRequests }) => {
     };
     return (
         <div className="space-y-8 overflow-y-scroll">
+            {requests.length === 0 && (
+                <p className="text-muted-foreground text-center">
+                    Je hebt momenteel geen verzoeken
+                </p>
+            )}
             {requests.map((request) => (
                 <div key={request.updated_at} className="flex items-center">
                     <div className="ml-4 space-y-1">

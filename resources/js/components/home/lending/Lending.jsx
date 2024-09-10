@@ -50,9 +50,11 @@ const Lending = () => {
                             </TableCell>
                             <TableCell>
                                 {new Date(lending.return_date) &&
-                                new Date(lending.return_date) >= Date.now()
-                                    ? "Uitgeleend"
-                                    : "Teruggebracht"}
+                                new Date(lending.return_date) >= Date.now() ? (
+                                    "Uitgeleend"
+                                ) : (
+                                    <strong>Moet nu terug</strong>
+                                )}
                             </TableCell>
                             <TableCell>
                                 {new Date(lending.return_date) > Date.now() ? (

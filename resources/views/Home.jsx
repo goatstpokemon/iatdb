@@ -5,6 +5,7 @@ import Borrowing from "@/components/home/borrowing/Borrowing";
 import Lending from "@/components/home/lending/Lending";
 import Aanvragen from "@/components/home/aanvragen/Aanvragen";
 import { useAuthContext } from "@/contexts/AuthContext";
+import Returns from "./cms/settings/ReturnsPage";
 
 const Home = () => {
     const { user } = useAuthContext();
@@ -17,19 +18,28 @@ const Home = () => {
                             <TabsTrigger value="overview">
                                 Overzicht
                             </TabsTrigger>
-                            <TabsTrigger value="lending">Retouren</TabsTrigger>
-                            <TabsTrigger value="returns">
+                            <TabsTrigger value="borrowing">
+                                Aan het lenen
+                            </TabsTrigger>
+                            <TabsTrigger value="lentout">
                                 Uit geleend
                             </TabsTrigger>
+                            <TabsTrigger value="returns">Retouren</TabsTrigger>
                         </TabsList>
                         <h2 className="text-3xl font-bold tracking-tight">
-                            Hallo {user?.name}
+                            Hey, {user?.name}
                         </h2>
                         <TabsContent value="overview" className="space-y-4">
                             <Overview />
                         </TabsContent>
-                        <TabsContent value="returns" className="space-y-4">
+                        <TabsContent value="lentout" className="space-y-4">
                             <Lending />
+                        </TabsContent>
+                        <TabsContent value="borrowing" className="space-y-4">
+                            <Borrowing />
+                        </TabsContent>
+                        <TabsContent value="returns" className="space-y-4">
+                            <Returns />
                         </TabsContent>
                         <TabsContent
                             value="notifications"

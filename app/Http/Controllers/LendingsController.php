@@ -37,8 +37,9 @@ class LendingsController extends Controller
         ], 200);
     }
 
-    public function returnProduct(Request $request, $productId)
+    public function returnProduct(Request $request)
     {
+        $productId = $request->id;
         $userId = auth()->user()->id;
         $lending = Lending::where('borrower_id', $userId)
             ->where('product_id', $productId)
@@ -46,15 +47,17 @@ class LendingsController extends Controller
             ->first();
 
         if (!$lending) {
-            return response()->response([
+            return response()->json([
                 'message' => 'Product is niet uitgeleend'
-            ], 404);
+            ], 500);
         }
 
         $lending->returned = true;
+        $lending->returned_at = date('Y-m-d');
+        $lending->checked = true;
         $lending->save();
 
-        return response()->response([
+        return response()->json([
             'message' => 'Product is geretourneerd'
         ], 200);
     }
@@ -62,7 +65,7 @@ class LendingsController extends Controller
     public function getYourLendings()
     {
         $userId = auth()->user()->id;
-        $lendings = Lending::where('borrower_id', $userId)->get();
+        $lendings = Lending::where('borrower_id', $userId)->where('returned', false)->with('product')->get();
         return response()->json([
             'lendings' => $lendings
         ], 200);

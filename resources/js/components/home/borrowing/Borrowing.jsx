@@ -1,3 +1,13 @@
+import apiClient from "@/api";
+import { Button } from "@/components/ui/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
     Table,
     TableBody,
@@ -7,8 +17,27 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import { MoreHorizontal } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const Borrowing = () => {
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        apiClient
+            .get("/lending/borrowed", {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(
+                        "ACCESS_TOKEN"
+                    )}`,
+                },
+            })
+            .then((response) => {
+                console.log(response.data.lendings);
+                setProducts(response.data.lendings);
+            });
+    }, []);
+
     return (
         <div>
             <h2 className="text-2xl font-bold text-muted-foreground">
@@ -21,18 +50,65 @@ const Borrowing = () => {
                         <TableHead>Product</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead>Retour datum</TableHead>
-                        <TableHead className="text-right">Bedrag</TableHead>
+                        <TableHead></TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    <TableRow>
-                        <TableCell className="font-medium">
-                            Pilot G2 gel pen
-                        </TableCell>
-                        <TableCell>Uitgeleend</TableCell>
-                        <TableCell>Nog 3 dagen</TableCell>
-                        <TableCell className="text-right">€0.50</TableCell>
-                    </TableRow>
+                    {products.map((product) => (
+                        <TableRow key={product.id}>
+                            <TableCell className="font-medium">
+                                {product.product.name}
+                            </TableCell>
+                            <TableCell>
+                                {new Date(product.return_date) &&
+                                new Date(product.return_date) >= Date.now() ? (
+                                    <>Aan het lenen</>
+                                ) : (
+                                    <strong>Moet nu terug</strong>
+                                )}
+                            </TableCell>
+                            <TableCell>
+                                {new Date(product.return_date) > Date.now() ? (
+                                    <>
+                                        Over {""}
+                                        {Math.ceil(
+                                            (new Date(product.return_date) -
+                                                Date.now()) /
+                                                (1000 * 60 * 60 * 24)
+                                        )}{" "}
+                                        dagen{" "}
+                                    </>
+                                ) : (
+                                    ""
+                                )}
+                            </TableCell>
+                            <TableCell>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button
+                                            variant="ghost"
+                                            className="h-8 w-8 p-0"
+                                        >
+                                            <span className="sr-only">
+                                                Menu openen
+                                            </span>
+                                            <MoreHorizontal className="h-4 w-4" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end">
+                                        <DropdownMenuLabel>
+                                            Acties
+                                        </DropdownMenuLabel>
+                                        <DropdownMenuItem
+                                            onClick={() => deleteCategory()}
+                                        >
+                                            Nu retourneren
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </TableCell>
+                        </TableRow>
+                    ))}
                 </TableBody>
             </Table>
         </div>

@@ -52,17 +52,16 @@ Route::controller(ProductController::class)->middleware('auth:sanctum')->prefix(
 
 // Private Lending Routes
 Route::controller(LendingsController::class)->middleware('auth:sanctum')->prefix('/lending')->group(function () {
+    Route::get('',  'index');
+    Route::get('/requests', 'lendingRequests');
     Route::get('/{id}/accept', 'acceptLendingRequest');
     Route::get('/{id}/reject', 'destroy');
-    Route::get('',  'index');
-    Route::get('/borrowed', 'borrowed');
+    Route::get('/borrowed', 'getYourLendings');
     Route::get('/lent', 'currentlyLentOut');
-    Route::get('/return/{id}', 'returnProduct');
-    Route::get('/yours', 'yours');
+    Route::get('/returns/{id}/return', 'returnProduct');
     // Route::get('/{id}', 'show');
     Route::post('/create', 'store');
     Route::post('/{id}/update', 'update');
-    Route::get('/requests', 'lendingRequests');
     Route::delete('/{id}/delete',  'destroy');
 });
 Route::controller(CategoryController::class)->middleware('auth:sanctum')->prefix('/categories')->group(function () {
