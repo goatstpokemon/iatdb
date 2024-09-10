@@ -103,14 +103,6 @@ const Product = () => {
                         <section className="mt-4 w-full">
                             <h2 className="sr-only">Product informatie</h2>
                             <div className="flex md:flex-row flex-col md:divide-x md:items-center">
-                                <div className="flex mr-4 items-end gap-1">
-                                    <p className="text-2xl ">
-                                        € {data.product.price}
-                                    </p>
-                                    <p className="text-xl text-muted-foreground">
-                                        / Per dag
-                                    </p>
-                                </div>
                                 <div>
                                     <h2 className="sr-only">Reviews</h2>
                                     <div>
@@ -214,62 +206,54 @@ const Product = () => {
                             />
                         </div>
                     </section>
-                    <section className="mt-20 py-32  max-w-[80rem] grid grid-cols-12">
-                        <div className="col-span-4">
-                            <h2 className="font-bold text-4xl">
-                                Klanten Reviews
+                    <section className="my-10 flex items-center gap-5">
+                        <img
+                            src={data.owner.profile_image}
+                            alt="image of user profile"
+                            className="w-20 h-20 rounded-full"
+                        />
+                        <Link to={`/users/${data.owner.id}`}>
+                            <h2 className="font-bold text-2xl ">
+                                {data.owner.name}
                             </h2>
-                            <div className="mt-4">
-                                {stars > 0 ? (
-                                    <div className="flex items-center">
-                                        {Array.from(
-                                            { length: stars },
-                                            (_, index) => (
-                                                <Star
-                                                    key={index}
-                                                    className="fill-yellow-400 h-8 w-8"
-                                                    strokeWidth={0}
-                                                    size={10}
-                                                />
-                                            )
-                                        )}
-                                        {product.reviews.length && (
-                                            <span className="text-sm ml-2">
-                                                {product.reviews.length}
-                                                reviews
-                                            </span>
-                                        )}
-                                    </div>
-                                ) : (
-                                    <div className="flex items-center">
-                                        {Array.from(
-                                            { length: 5 },
-                                            (_, index) => (
-                                                <Star
-                                                    key={index}
-                                                    className="fill-gray-200"
-                                                    strokeWidth={0}
-                                                    size={20}
-                                                />
-                                            )
-                                        )}
-                                        <span className="text-sm ml-2 text-muted-foreground">
-                                            Geen reviews
+                            {stars > 0 ? (
+                                <div className="flex items-center">
+                                    {Array.from(
+                                        { length: stars },
+                                        (_, index) => (
+                                            <Star
+                                                key={index}
+                                                className="fill-yellow-400 h-8 w-8"
+                                                strokeWidth={0}
+                                                size={10}
+                                            />
+                                        )
+                                    )}
+                                    {product.reviews.length && (
+                                        <span className="text-sm ml-2">
+                                            {product.reviews.length} reviews
                                         </span>
-                                    </div>
-                                )}
-                            </div>
-                            <div className="mt-10">
-                                <h3 className="text-xl">Deel je ervaring</h3>
-                                <p className="text-sm text-muted-foreground">
-                                    Deel je ervaning met het lenen van een
-                                    product. Zo help je weer de volgende persoon
-                                </p>
-                            </div>
-                        </div>
-                        <div className="col-start-6 col-span-7">
-                            <ReviewComponent />
-                        </div>
+                                    )}
+                                </div>
+                            ) : (
+                                <div className="flex items-center">
+                                    {Array.from({ length: 5 }, (_, index) => (
+                                        <Star
+                                            key={index}
+                                            className="fill-gray-200"
+                                            strokeWidth={0}
+                                            size={10}
+                                        />
+                                    ))}
+                                    <span className="text-sm ml-2 text-muted-foreground">
+                                        Geen reviews
+                                    </span>
+                                </div>
+                            )}
+                        </Link>
+                    </section>
+                    <section>
+                        {product.}
                     </section>
                 </div>
             </Container>

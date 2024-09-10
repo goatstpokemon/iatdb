@@ -95,7 +95,9 @@ const CategoriesList = () => {
                             <h2 className="text-xl font-semibold mb-1">
                                 {item.name}
                             </h2>
-                            <p className="text-md font-normal">{item.price}</p>
+                            <p className="text-md font-normal">
+                                {item.user.name}
+                            </p>
                         </Link>
                     ))}
                 </div>

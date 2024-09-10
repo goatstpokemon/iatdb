@@ -15,7 +15,6 @@ import ProfileWrapper from "../views/cms/settings/profile/ProfileWrapper";
 import { AccountPage } from "../views/cms/settings/account/AccountPage";
 import NotFound from "../views/404";
 import Product from "../views/Product";
-import LendingPage from "../views/cms/settings/lending/LendingPage";
 import { AuthContextProvider } from "./contexts/AuthContext";
 import YourProducts from "../views/cms/settings/products/YourProducts";
 import AddProduct from "../views/cms/settings/products/AddProduct";
@@ -79,7 +78,6 @@ ReactDOM.createRoot(document.getElementById("app")).render(
                     <Route path="profile" element={<SettingsLayout />}>
                         <Route index path="" element={<ProfileWrapper />} />
                         <Route path="account" element={<AccountPage />} />
-                        <Route path="lending" element={<LendingPage />} />
                         <Route path="products" element={<YourProducts />} />
                         <Route path="products/add" element={<AddProduct />} />
                         <Route

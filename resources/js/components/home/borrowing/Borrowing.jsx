@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/table";
 import { MoreHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const Borrowing = () => {
     const [products, setProducts] = useState([]);
@@ -38,6 +39,27 @@ const Borrowing = () => {
             });
     }, []);
 
+    const returnProduct = async (id) => {
+        try {
+            await apiClient
+                .get(`/lending/returns/${id}/return`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem(
+                            "ACCESS_TOKEN"
+                        )}`,
+                    },
+                })
+                .then(() => {
+                    toast.success("Product geretourneerd");
+                    setProducts(
+                        products.filter((product) => product.id !== id)
+                    );
+                });
+        } catch (error) {
+            toast.error("Er is iets fout gegaan");
+            console.error(error);
+        }
+    };
     return (
         <div>
             <h2 className="text-2xl font-bold text-muted-foreground">
@@ -100,7 +122,9 @@ const Borrowing = () => {
                                             Acties
                                         </DropdownMenuLabel>
                                         <DropdownMenuItem
-                                            onClick={() => deleteCategory()}
+                                            onClick={() =>
+                                                returnProduct(product.id)
+                                            }
                                         >
                                             Nu retourneren
                                         </DropdownMenuItem>

@@ -41,7 +41,6 @@ const ProductList = ({ title, data, isLoading }) => {
                             <h2 className="text-xl font-semibold mb-1">
                                 {item.name}
                             </h2>
-                            <p className="text-md font-normal">{item.price}</p>
                         </Link>
                     ))}
                 </div>

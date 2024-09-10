@@ -39,26 +39,28 @@ class LendingsController extends Controller
 
     public function returnProduct(Request $request)
     {
-        $productId = $request->id;
+        $returnId = $request->id;
         $userId = auth()->user()->id;
-        $lending = Lending::where('borrower_id', $userId)
-            ->where('product_id', $productId)
+
+        $lending = Lending::where('id', $returnId)
+            ->where('borrower_id', $userId)
             ->where('returned', false)
-            ->first();
+            ->firstOrFail();
+
 
         if (!$lending) {
             return response()->json([
-                'message' => 'Product is niet uitgeleend'
-            ], 500);
+                'message' => 'Product niet gevonden'
+            ], 404);
         }
 
         $lending->returned = true;
-        $lending->returned_at = date('Y-m-d');
+        $lending->returned_at = now();
         $lending->checked = true;
         $lending->save();
 
         return response()->json([
-            'message' => 'Product is geretourneerd'
+            'message' => 'Product geretourneerd'
         ], 200);
     }
 

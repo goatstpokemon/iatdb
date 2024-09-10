@@ -16,31 +16,14 @@ use Illuminate\Support\Facades\Storage;
 class ProductController extends Controller
 {
 
-
-
-
-
     public function index()
     {
 
         $products = Product::all();
+        $products->load('user');
         return response()->json([
             'products' => $products
         ], 200);
-    }
-
-    public function home()
-    {
-        $user =  Auth::user();
-        $products = $user->products;
-        $rentedProducts = Product::where('rented_by', $user->id)->get();
-        $availible = ProductController::availible();
-        return view('home', [
-            "available" => $availible,
-            "products" => $products,
-            "user" => $user,
-            "rentedProducts" => $rentedProducts
-        ]);
     }
 
     public function yours()

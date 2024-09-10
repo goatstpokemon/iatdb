@@ -24,16 +24,6 @@ const SettingsLayout = () => {
             href: "/profile/products",
             subtitle: "Al je producten die je hebt toegevoegd aan Time2Share",
         },
-        {
-            title: "Uitlenen",
-            href: "/profile/lending",
-            subtitle: "Beheer hier je uitgeleende producten",
-        },
-        {
-            title: "Lenen",
-            href: "/profile/borrowing",
-            subtitle: "Zie hier de producten die je hebt geleend",
-        },
     ];
 
     return (

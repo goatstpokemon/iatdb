@@ -44,13 +44,6 @@ const User = () => {
                         <p className="text-md text-muted-foreground">
                             {user.email}
                         </p>
-                        <div className="flex gap-4 mt-2 font-bold text-md">
-                            <span>20x Geleend</span>
-                            <span>10x Uitgeleed</span>
-                        </div>
-                        <div className="flex gap-4 mt-4">
-                            <Button varient="primary">Bekijk producten</Button>
-                        </div>
                     </div>
                 </section>
                 <section className="mt-10">
@@ -91,11 +84,7 @@ const User = () => {
                                                 <p>{review.rating} sterren</p>
                                             </div>
                                             <div className="flex flex-col">
-                                                <p>
-                                                    {review.type === "lending"
-                                                        ? "Uitgeleend"
-                                                        : "Geleend"}
-                                                </p>
+                                                <p></p>
                                             </div>
                                         </div>
                                     ))}
@@ -114,10 +103,6 @@ const User = () => {
                                 <p>
                                     <span className="font-bold">Naam:</span>{" "}
                                     {user.name}
-                                </p>
-                                <p>
-                                    <span className="font-bold">bio:</span>{" "}
-                                    {user.bio}
                                 </p>
                                 <p>
                                     <span className="font-bold">Email:</span>{" "}
