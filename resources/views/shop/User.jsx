@@ -11,6 +11,7 @@ const User = () => {
     const [user, setUser] = useState({});
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [reviews, setReviews] = useState([]);
     useEffect(() => {
         apiClient
             .get(`/user/${id}`, {
@@ -24,9 +25,10 @@ const User = () => {
                 setLoading(false);
                 setUser(response.data.user);
                 setProducts(response.data.products);
+                setReviews(response.data.reviews);
             });
     }, []);
-    console.log({ products, user });
+    console.log({ reviews: reviews });
 
     if (loading) {
         return <p>Loading...</p>;
@@ -72,16 +74,20 @@ const User = () => {
                             )}
                         </TabsContent>
                         <TabsContent value="reviews">
-                            {user.reviews ? (
+                            {reviews ? (
                                 <>
-                                    {user.reviews.map((review) => (
+                                    {reviews.map((review) => (
                                         <div
                                             key={review.id}
                                             className="flex gap-4"
                                         >
                                             <div className="flex flex-col">
-                                                <p>{review.comment}</p>
-                                                <p>{review.rating} sterren</p>
+                                                <p className="text-xl">
+                                                    {review.rating} sterren
+                                                </p>
+                                                <p className="text-muted-foreground">
+                                                    {review.review}
+                                                </p>
                                             </div>
                                             <div className="flex flex-col">
                                                 <p></p>

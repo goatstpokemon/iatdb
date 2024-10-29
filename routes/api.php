@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\LendingsController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserReviewController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +20,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::post('/tokens/create', function (Request $request) {
+    $token = $request->user()->createToken($request->token_name);
+
+    return ['token' => $token->plainTextToken];
+});
 
 
 // Public Auth Routes
@@ -71,8 +77,12 @@ Route::controller(CategoryController::class)->middleware('auth:sanctum')->prefix
     Route::post('/{id}/edit', 'edit');
     Route::post('/{id}/delete', 'destroy');
 });
-// Private Category Routes
-
-// Private Borrowing Routes
-
 // Private Review Routes
+Route::controller(UserReviewController::class)->middleware('auth:sanctum')->prefix('/review')->group(function () {
+    Route::get('',  'index');
+    Route::post('/create', 'addReview');
+    Route::get('/{id}', 'show');
+    Route::get('/{id}/request', 'requestReview');
+    Route::post('/{id}/edit', 'update');
+    Route::delete('/{id}/delete',  'destroy');
+});

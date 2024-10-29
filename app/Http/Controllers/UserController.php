@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\User;
+use App\Models\UserReview;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -80,8 +81,8 @@ class UserController extends Controller
         $userId = $request->route('id');
         $user = User::find($userId);
         $products = Product::where('user_id', $userId)->get();
-
-        return response()->json(['user' => $user, 'products' => $products]);
+        $reviews = UserReview::where('owner', $userId)->get();
+        return response()->json(['user' => $user, 'products' => $products, 'reviews' => $reviews]);
     }
 
 

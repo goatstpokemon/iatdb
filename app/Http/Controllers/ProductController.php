@@ -131,8 +131,6 @@ class ProductController extends Controller
     {
         $user =  Auth::user();
         $products = $user->products;
-
-
         return response()->json([
             'products' => $products
         ], 200);

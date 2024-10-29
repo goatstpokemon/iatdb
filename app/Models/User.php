@@ -66,4 +66,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Lending::class, 'borrower_id');
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(UserReview::class, 'owner');
+    }
 }

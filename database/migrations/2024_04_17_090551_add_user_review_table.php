@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('userReviews', function (Blueprint $table) {
+        Schema::create('user_reviews', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('owner');
+            $table->unsignedBigInteger('renter');
             $table->text('review');
             $table->integer('rating');
             $table->timestamps();
-            $table->foreign('user_id')
+            $table->foreign('owner')
                 ->references('id')->on('users')
                 ->onDelete('cascade');
         });
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('userReviews');
+        Schema::dropIfExists('user_reviews');
     }
 };

@@ -12,10 +12,6 @@ import { useAuthContext } from "@/contexts/AuthContext";
 export const Login = () => {
     const imageRef = useRef();
     const tl = gsap.timeline();
-    const { user } = useAuthContext();
-    if (user.name) {
-        return <Navigate to="/" />;
-    }
     useGSAP(() => {
         tl.fromTo(
             ".topDown",
@@ -36,8 +32,8 @@ export const Login = () => {
             ".slideOut",
             {
                 duration: 2,
+                width: "20vw",
                 opacity: 1,
-                width: "w-full",
                 ease: "power3.inOut",
             },
             0
@@ -65,34 +61,30 @@ export const Login = () => {
                     to="/aanmelden"
                     className={cn(
                         buttonVariants({ variant: "cool" }),
-                        "absolute right-4 top-4 md:right-8 md:top-8 font-semibold "
+                        "absolute right-4 top-4 md:right-8 md:top-8 font-semibold cursor-pointer z-10 "
                     )}
                 >
                     Account aanmaken
                 </Link>
-                <div
-                    className="relative hidden lg:flex lg:flex-col
-                lg:justify-center "
-                >
+                <div className="relative hidden  md:flex md:flex-col md:justify-center ">
                     <div className="h-fit relative mb-10 topDown">
                         <img
                             ref={imageRef}
                             src="storage/person.jpg"
-                            className="rounded-2xl xl:w-[25vw] md:w-[40vw] -z-10" // Update CSS properties
+                            className="rounded-2xl w-[20vw]" // Update CSS properties
                             alt=""
                         />
-
-                        <div className=" z-20 w-0 opacity-0 h-auto  flex-col bg-muted p-10 text-white lg:flex dark:border-r justify-end xl:w-[25vw] md:w-[40vw]  bg-zinc-900 rounded-2xl slideOut">
-                            <div className="relative  flex flex-col  align-bottom sm:text-md xl:text-lg font-medium xl:w-[25vw] md:w-[40vw]">
-                                <div className="flex items-center mb-4  ">
-                                    <Clock size={24} />
-                                    <h1 className="ml-2">Time2Share</h1>
-                                </div>
-                                <br />
-                                Delen van producten verlaagt de impact op het
-                                milieu. <br />
-                                Begin daarom vandaag nog met Time2Share!
+                    </div>
+                    <div className=" w-0 opacity-0 h-auto  flex-col bg-muted p-10 text-white lg:flex dark:border-r justify-end xl:max-h-[15vh] bg-zinc-900 rounded-2xl slideOut">
+                        <div className="relative  z-20 flex flex-col  align-bottom text-xl font-medium">
+                            <div className="flex items-center mb-4  ">
+                                <Clock size={24} />
+                                <h1 className="ml-2">Time2Share</h1>
                             </div>
+                            <br />
+                            Delen van producten verlaagt de impact op het
+                            milieu. <br />
+                            Begin daarom vandaag nog met Time2Share!
                         </div>
                     </div>
                 </div>

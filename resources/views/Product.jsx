@@ -14,29 +14,45 @@ import { toast } from "sonner";
 import { Loader, Shield, Star } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
+import { Textarea } from "@/components/ui/textarea";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
+const createReviewSchema = z.object({
+    rating: z.preprocess((val) => Number(val), z.number().min(1).max(5)),
+    comment: z.string().min(1),
+});
 const Product = () => {
     const { id } = useParams();
     const [stars, setStars] = useState(4);
     const [range, setRange] = useState([]);
-    const [data, setData] = useState([]);
+    const [product, setProduct] = useState([]);
     const user = JSON.parse(localStorage.getItem("user"));
     const [borrowingData, setBorrowingData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
-    const product = {
-        reviews: [
-            { id: 1, comment: "Good product", rating: 5 },
-            { id: 2, comment: "Bad product", rating: 1 },
-        ],
-    };
+    const [allowedToReview, setAllowedToReview] = useState(false);
 
-    const calcStars = (reviews) => {
-        let total = 0;
-        reviews.forEach((review) => {
-            total += review.rating;
-        });
-        // setStars(total / reviews.length);
-    };
+    const form = useForm({
+        resolver: zodResolver(createReviewSchema),
+        mode: "onChange",
+    });
+
     useEffect(() => {
         apiClient
             .get(`/product/item/${id}`, {
@@ -47,10 +63,20 @@ const Product = () => {
                 },
             })
             .then((res) => {
-                setData(res.data);
+                setProduct(res.data);
+                apiClient
+                    .get(`/review/${id}/request`, {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem(
+                                "ACCESS_TOKEN"
+                            )}`,
+                        },
+                    })
+                    .then((res) => {
+                        setAllowedToReview(res.data.allowed);
+                    });
                 setIsLoading(false);
             });
-        calcStars(product.reviews);
     }, []);
     console.log({ rangeFrom: range.from, rangeTo: range.to });
     const handleResetClick = () => setRange([]);
@@ -58,7 +84,7 @@ const Product = () => {
         setBorrowingData({
             lending_date: new Date(range.from),
             return_date: new Date(range.to),
-            product_id: data.product.id,
+            product_id: product.product.id,
             borrower_id: user.id,
         });
         apiClient
@@ -73,7 +99,28 @@ const Product = () => {
                 toast.success("Lening aangevraagd");
             });
     };
-    console.log({ borrowingData });
+    const handleReviewSubmit = (data) => {
+        console.log({ data });
+
+        const form = new FormData();
+        form.append("rating", data.rating);
+        form.append("comment", data.comment);
+        form.append("owner", product.owner.id);
+        form.append("renter", user.id);
+        console.log({ form });
+
+        apiClient
+            .post(`/review/create`, form, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(
+                        "ACCESS_TOKEN"
+                    )}`,
+                },
+            })
+            .then(() => {
+                toast.success("Review geplaatst");
+            });
+    };
     if (isLoading) {
         return <Loader className="w-10 h-10" />;
     } else {
@@ -87,9 +134,9 @@ const Product = () => {
                                     <BreadcrumbSeparator />
                                     <BreadcrumbItem>
                                         <BreadcrumbLink
-                                            href={`/products/categories/${data.product.category}`}
+                                            href={`/products/categories/${product.product.category}`}
                                         >
-                                            {data.product.category}
+                                            {product.product.category}
                                         </BreadcrumbLink>
                                     </BreadcrumbItem>
                                 </BreadcrumbList>
@@ -97,59 +144,15 @@ const Product = () => {
                         </nav>
                         <div className="mt-4">
                             <h1 className="font-bold text-4xl">
-                                {data.product.name}
+                                {product.product.name}
                             </h1>
                         </div>
                         <section className="mt-4 w-full">
                             <h2 className="sr-only">Product informatie</h2>
-                            <div className="flex md:flex-row flex-col md:divide-x md:items-center">
-                                <div>
-                                    <h2 className="sr-only">Reviews</h2>
-                                    <div>
-                                        {stars > 0 ? (
-                                            <div className="flex  items-center md:ml-4">
-                                                {Array.from(
-                                                    { length: stars },
-                                                    (_, index) => (
-                                                        <Star
-                                                            key={index}
-                                                            className="fill-yellow-400 h-8 w-8"
-                                                            strokeWidth={0}
-                                                            size={20}
-                                                        />
-                                                    )
-                                                )}
-                                                {product.reviews.length && (
-                                                    <span className="text-sm ml-2">
-                                                        {product.reviews.length}
-                                                        reviews
-                                                    </span>
-                                                )}
-                                            </div>
-                                        ) : (
-                                            <div className="flex items-center ml-4">
-                                                {Array.from(
-                                                    { length: 5 },
-                                                    (_, index) => (
-                                                        <Star
-                                                            key={index}
-                                                            className="fill-gray-200"
-                                                            strokeWidth={0}
-                                                            size={20}
-                                                        />
-                                                    )
-                                                )}
-                                                <span className="text-sm ml-2 text-muted-foreground">
-                                                    Geen reviews
-                                                </span>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
+
                             <div className="mt-4 text-muted-foreground">
                                 <p className="text-md">
-                                    {data.product.description}
+                                    {product.product.description}
                                 </p>
                             </div>
                             <div className="mt-4">
@@ -200,60 +203,170 @@ const Product = () => {
                     <section>
                         <div className="rounded-lg">
                             <img
-                                src={data.product.product_image}
+                                src={product.product.product_image}
                                 alt=""
                                 className="rounded-lg object-cover h-full w-full"
                             />
                         </div>
                     </section>
-                    <section className="my-10 flex items-center gap-5">
-                        <img
-                            src={data.owner.profile_image}
-                            alt="image of user profile"
-                            className="w-20 h-20 rounded-full"
-                        />
-                        <Link to={`/users/${data.owner.id}`}>
-                            <h2 className="font-bold text-2xl ">
-                                {data.owner.name}
-                            </h2>
-                            {stars > 0 ? (
-                                <div className="flex items-center">
-                                    {Array.from(
-                                        { length: stars },
-                                        (_, index) => (
-                                            <Star
-                                                key={index}
-                                                className="fill-yellow-400 h-8 w-8"
-                                                strokeWidth={0}
-                                                size={10}
-                                            />
-                                        )
-                                    )}
-                                    {product.reviews.length && (
+                    <section className="my-10 flex flex-col ">
+                        <section className="flex items-center gap-5">
+                            <img
+                                src={product.owner.profile_image}
+                                alt="image of user profile"
+                                className="w-20 h-20 rounded-full"
+                            />
+                            <Link to={`/users/${product.owner.id}`}>
+                                <h2 className="font-bold text-2xl ">
+                                    {product.owner.name}
+                                </h2>
+                                {stars > 0 ? (
+                                    <div className="flex items-center">
+                                        {Array.from(
+                                            { length: stars },
+                                            (_, index) => (
+                                                <Star
+                                                    key={index}
+                                                    className="fill-yellow-400 h-8 w-8"
+                                                    strokeWidth={0}
+                                                    size={10}
+                                                />
+                                            )
+                                        )}
+
                                         <span className="text-sm ml-2">
-                                            {product.reviews.length} reviews
+                                            2 reviews
                                         </span>
-                                    )}
-                                </div>
+                                    </div>
+                                ) : (
+                                    <div className="flex items-center">
+                                        {Array.from(
+                                            { length: 5 },
+                                            (_, index) => (
+                                                <Star
+                                                    key={index}
+                                                    className="fill-gray-200"
+                                                    strokeWidth={0}
+                                                    size={10}
+                                                />
+                                            )
+                                        )}
+                                        <span className="text-sm ml-2 text-muted-foreground">
+                                            Geen reviews
+                                        </span>
+                                    </div>
+                                )}
+                            </Link>
+                        </section>
+                        <section>
+                            {/* hier komt een melding om een review achter te laten als je al het product geleend hebt */}
+                            {allowedToReview === true ? (
+                                <>
+                                    <Form {...form}>
+                                        <form
+                                            onSubmit={form.handleSubmit(
+                                                handleReviewSubmit
+                                            )}
+                                        >
+                                            <h2 className="font-bold text-xl">
+                                                Laat een review achter
+                                            </h2>
+                                            <FormField
+                                                control={form.control}
+                                                name="rating"
+                                                className="flex items-center gap-4"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel>
+                                                            Rating
+                                                        </FormLabel>
+                                                        <Select
+                                                            onValueChange={
+                                                                field.onChange
+                                                            }
+                                                            defaultValue={
+                                                                field.value
+                                                            }
+                                                        >
+                                                            <FormControl>
+                                                                <SelectTrigger>
+                                                                    <SelectValue placeholder="Kies sterren" />
+                                                                </SelectTrigger>
+                                                            </FormControl>
+
+                                                            <SelectContent>
+                                                                <SelectItem
+                                                                    {...field}
+                                                                    value={1}
+                                                                >
+                                                                    1 ster
+                                                                </SelectItem>
+                                                                <SelectItem
+                                                                    {...field}
+                                                                    value={2}
+                                                                >
+                                                                    2 sterren
+                                                                </SelectItem>
+                                                                <SelectItem
+                                                                    {...field}
+                                                                    value={3}
+                                                                >
+                                                                    3 sterren
+                                                                </SelectItem>
+                                                                <SelectItem
+                                                                    {...field}
+                                                                    value={4}
+                                                                >
+                                                                    4 sterren
+                                                                </SelectItem>
+                                                                <SelectItem
+                                                                    {...field}
+                                                                    value={5}
+                                                                >
+                                                                    5 sterren
+                                                                </SelectItem>
+                                                            </SelectContent>
+                                                        </Select>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                            <FormField
+                                                control={form.control}
+                                                name="comment"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel>
+                                                            Comment
+                                                        </FormLabel>
+                                                        <FormControl>
+                                                            <Textarea
+                                                                placeholder="Wat vond je van de gebruiker?"
+                                                                {...field}
+                                                            />
+                                                        </FormControl>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                            <Button
+                                                type="submit"
+                                                className="mt-5"
+                                            >
+                                                Plaats review
+                                            </Button>
+                                        </form>
+                                    </Form>
+                                </>
                             ) : (
-                                <div className="flex items-center">
-                                    {Array.from({ length: 5 }, (_, index) => (
-                                        <Star
-                                            key={index}
-                                            className="fill-gray-200"
-                                            strokeWidth={0}
-                                            size={10}
-                                        />
-                                    ))}
-                                    <span className="text-sm ml-2 text-muted-foreground">
-                                        Geen reviews
-                                    </span>
-                                </div>
+                                <>
+                                    <ReviewComponent
+                                        product_id={id}
+                                        user_id={user.id}
+                                    />
+                                </>
                             )}
-                        </Link>
-                    </section>
-                    <section>
-                        {product.}
+                        </section>
                     </section>
                 </div>
             </Container>

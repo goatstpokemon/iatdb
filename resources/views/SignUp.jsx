@@ -31,7 +31,7 @@ export const SignUp = () => {
             ".slideOut",
             {
                 duration: 2,
-                width: "40vw",
+                width: "20vw",
                 opacity: 1,
                 ease: "power3.inOut",
             },
@@ -71,7 +71,7 @@ export const SignUp = () => {
                         <img
                             ref={imageRef}
                             src="storage/person.jpg"
-                            className="rounded-2xl w-[40vw]" // Update CSS properties
+                            className="rounded-2xl w-[20vw]" // Update CSS properties
                             alt=""
                         />
                     </div>
